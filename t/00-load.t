@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok( 'Mojo::Google' ) || print "Bail out!\n";
+    use_ok('Mojo::Google') || print "Bail out!\n";
 }
 
-diag( "Testing Mojo::Google $Mojo::Google::VERSION, Perl $], $^X" );
+diag("Testing Mojo::Google $Mojo::Google::VERSION, Perl $], $^X");

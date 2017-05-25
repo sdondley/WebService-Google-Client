@@ -23,23 +23,23 @@ use Mojolicious::Plugin::OAuth2;
 #   return $j[0];
 # }
 
-
 # my $f = return_json_filename();
 
-my $config = Config::JSON->new($ENV{'GOAUTH_TOKENSFILE'});
+my $config = Config::JSON->new( $ENV{'GOAUTH_TOKENSFILE'} );
 delete $ENV{'GOAUTH_TOKENSFILE'};
 
 # authorize_url and token_url can be retrieved from OAuth discovery document
 # https://github.com/marcusramberg/Mojolicious-Plugin-OAuth2/issues/52
 plugin "OAuth2" => {
-  google => {
-   key => $config->get('gapi/client_id'),        # $config->{gapi}{client_id},
-   secret => $config->get('gapi/client_secret'), #$config->{gapi}{client_secret},
-   authorize_url => 'https://accounts.google.com/o/oauth2/v2/auth?response_type=code',
-   token_url => 'https://www.googleapis.com/oauth2/v4/token'
-  }
+    google => {
+        key => $config->get('gapi/client_id'),    # $config->{gapi}{client_id},
+        secret => $config->get('gapi/client_secret')
+        ,    #$config->{gapi}{client_secret},
+        authorize_url =>
+          'https://accounts.google.com/o/oauth2/v2/auth?response_type=code',
+        token_url => 'https://www.googleapis.com/oauth2/v4/token'
+    }
 };
-
 
 =method get_new_tokens
 
@@ -48,17 +48,18 @@ Get new access_token by auth_code
 =cut
 
 helper get_new_tokens => sub {
-  my ($c,$auth_code) = @_;
-  my $hash = {};
-  $hash->{code} = $c->param('code');
-  $hash->{redirect_uri} = $c->url_for->to_abs->to_string;
-  $hash->{client_id} = $config->get('gapi/client_id');
-  $hash->{client_secret} = $config->get('gapi/client_secret');
-  $hash->{grant_type} = 'authorization_code';
-  my $tokens = $c->ua->post('https://www.googleapis.com/oauth2/v4/token' => form => $hash)->res->json;
-  return $tokens;
+    my ( $c, $auth_code ) = @_;
+    my $hash = {};
+    $hash->{code}          = $c->param('code');
+    $hash->{redirect_uri}  = $c->url_for->to_abs->to_string;
+    $hash->{client_id}     = $config->get('gapi/client_id');
+    $hash->{client_secret} = $config->get('gapi/client_secret');
+    $hash->{grant_type}    = 'authorization_code';
+    my $tokens = $c->ua->post(
+        'https://www.googleapis.com/oauth2/v4/token' => form => $hash )
+      ->res->json;
+    return $tokens;
 };
-
 
 =method get_email
 
@@ -67,65 +68,71 @@ Get email address of API user
 =cut
 
 helper get_email => sub {
-  my ($c, $access_token) = @_;
-  my %h = (
- 	'Authorization' => 'Bearer '.$access_token
-  );
-  $c->ua->get('https://www.googleapis.com/auth/plus.profile.emails.read' => form => \%h)->res->json;
+    my ( $c, $access_token ) = @_;
+    my %h = ( 'Authorization' => 'Bearer ' . $access_token );
+    $c->ua->get(
+        'https://www.googleapis.com/auth/plus.profile.emails.read' => form =>
+          \%h )->res->json;
 };
 
-
 get "/" => sub {
-  my $c = shift;
-  app->log->info("Will store tokens at".$config->getFilename ($config->pathToFile));
-  if ($c->param('code')) {
-    app->log->info("Authorization code was retrieved: ".$c->param('code'));
+    my $c = shift;
+    app->log->info(
+        "Will store tokens at" . $config->getFilename( $config->pathToFile ) );
+    if ( $c->param('code') ) {
+        app->log->info(
+            "Authorization code was retrieved: " . $c->param('code') );
 
-    my $tokens = $c->get_new_tokens($c->param('code'));
-    app->log->info("App got new tokens: ".Dumper $tokens);
+        my $tokens = $c->get_new_tokens( $c->param('code') );
+        app->log->info( "App got new tokens: " . Dumper $tokens);
 
-    if ($tokens) {
-      my $user_data;
-      # warn Dumper $user_data;
-      # you can use https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=XYZ123 for development
+        if ($tokens) {
+            my $user_data;
 
-      if ($tokens->{id_token}) {
+# warn Dumper $user_data;
+# you can use https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=XYZ123 for development
 
-        # my $jwt = Mojo::JWT->new(claims => $tokens->{id_token});
-        # warn "Mojo header:".Dumper $jwt->header;
+            if ( $tokens->{id_token} ) {
 
-        # my $keys = $c->get_all_google_jwk_keys(); # arrayref
-        # my ($header, $data) = decode_jwt( token => $tokens->{id_token}, decode_header => 1, key => '' ); # exctract kid
-        # warn "Decode header :".Dumper $header;
+                # my $jwt = Mojo::JWT->new(claims => $tokens->{id_token});
+                # warn "Mojo header:".Dumper $jwt->header;
 
-      	$user_data = decode_jwt(
-      		token => $tokens->{id_token},
-      		kid_keys => $c->ua->get('https://www.googleapis.com/oauth2/v3/certs')->res->json,
-      	);
+# my $keys = $c->get_all_google_jwk_keys(); # arrayref
+# my ($header, $data) = decode_jwt( token => $tokens->{id_token}, decode_header => 1, key => '' ); # exctract kid
+# warn "Decode header :".Dumper $header;
 
-        warn "Decoded user data:".Dumper $user_data;
-      };
+                $user_data = decode_jwt(
+                    token => $tokens->{id_token},
+                    kid_keys =>
+                      $c->ua->get('https://www.googleapis.com/oauth2/v3/certs')
+                      ->res->json,
+                );
 
-      #$user_data->{email};
-      #$user_data->{family_name}
-      #$user_data->{given_name}
+                warn "Decoded user data:" . Dumper $user_data;
+            }
 
-      # $tokensfile->set('tokens/'.$user_data->{email}, $tokens->{access_token});
-      $config->addToHash('gapi/tokens/'.$user_data->{email}, 'access_token', $tokens->{access_token} );
+            #$user_data->{email};
+            #$user_data->{family_name}
+            #$user_data->{given_name}
 
-      if ($tokens->{refresh_token}) {
-        $config->addToHash('gapi/tokens/'.$user_data->{email}, 'refresh_token', $tokens->{refresh_token});
-      }
+     # $tokensfile->set('tokens/'.$user_data->{email}, $tokens->{access_token});
+            $config->addToHash( 'gapi/tokens/' . $user_data->{email},
+                'access_token', $tokens->{access_token} );
+
+            if ( $tokens->{refresh_token} ) {
+                $config->addToHash( 'gapi/tokens/' . $user_data->{email},
+                    'refresh_token', $tokens->{refresh_token} );
+            }
+        }
+
+        $c->render( json => $config->get('gapi') );
     }
-
-    $c->render( json => $config->get('gapi') );
-  } else {
-  	$c->render(template => 'oauth');
-  }
+    else {
+        $c->render( template => 'oauth' );
+    }
 };
 
 app->start;
-
 
 __DATA__
 

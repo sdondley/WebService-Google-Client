@@ -6,27 +6,37 @@ use Moo;
 use Moo::Google::Credentials;
 use Moo::Google::AuthStorage;
 use Mojo::UserAgent;
-use Data::Dumper; # for debug
-use Data::Printer; # for debug
+use Data::Dumper;     # for debug
+use Data::Printer;    # for debug
 
-has 'ua' => ( is => 'ro', default => sub { Mojo::UserAgent->new });
-has 'do_autorefresh' => ( is => 'rw', default => 1 );  # if 1 storage must be configured
+has 'ua' => ( is => 'ro', default => sub { Mojo::UserAgent->new } );
+has 'do_autorefresh' => ( is => 'rw', default => 1 )
+  ;                   # if 1 storage must be configured
 has 'auto_update_tokens_in_storage' => ( is => 'rw', default => 1 );
-has 'debug' => ( is => 'rw', default => 0 );
-has 'credentials' => ( is => 'rw', default => sub { Moo::Google::Credentials->instance }, handles => [qw(access_token user auth_storage)], lazy => 1 );
+has 'debug'                         => ( is => 'rw', default => 0 );
+has 'credentials'                   => (
+    is      => 'rw',
+    default => sub { Moo::Google::Credentials->instance },
+    handles => [qw(access_token user auth_storage)],
+    lazy    => 1
+);
 
 # Keep access_token in headers always actual
 
 sub build_headers {
+
     # warn "".(caller(0))[3]."() : ".Dumper \@_;
     my $self = shift;
+
     # p $self;
     my $headers = {};
+
     # warn "build_headers: ".$self->access_token;
-    if ($self->access_token) {
-        $headers->{'Authorization'} = 'Bearer '.$self->access_token;
+    if ( $self->access_token ) {
+        $headers->{'Authorization'} = 'Bearer ' . $self->access_token;
         return $headers;
-    } else {
+    }
+    else {
         die 'No access_token, cant build headers';
     }
 
@@ -44,40 +54,64 @@ sub build_headers {
 
 =cut
 
-sub build_http_transaction  {
-  my ($self, $params) = @_;
+sub build_http_transaction {
+    my ( $self, $params ) = @_;
 
-  # warn "".(caller(0))[3]."() : ".Dumper \@_;
+    # warn "".(caller(0))[3]."() : ".Dumper \@_;
 
-  my $headers = $self->build_headers;
-  warn "build_http_transaction HEADERS: ".Dumper $headers if ($self->debug);
+    my $headers = $self->build_headers;
+    warn "build_http_transaction HEADERS: " . Dumper $headers
+      if ( $self->debug );
 
-  # Hash key names
-  my $http_method = $params->{httpMethod}; # uppercase
-  my $path = $params->{path};
-  my $optional_data = $params->{options};
-  warn "build_http_transaction() Options: ".Dumper $optional_data if ($self->debug);
+    # Hash key names
+    my $http_method   = $params->{httpMethod};    # uppercase
+    my $path          = $params->{path};
+    my $optional_data = $params->{options};
+    warn "build_http_transaction() Options: " . Dumper $optional_data
+      if ( $self->debug );
 
-  my $tx;
+    my $tx;
 
-  if (!defined $http_method) { die 'No http method specified' };
+    if ( !defined $http_method ) { die 'No http method specified' }
 
-  if (($http_method eq uc 'post') && !defined $optional_data) { warn 'Attention! You are using POST, but no payload specified' };
-
-    if (lc $http_method eq 'get') {
-      $tx = $self->ua->build_tx(uc $http_method => $path => $headers => form => $optional_data);
-    } elsif (lc $http_method eq 'delete')  {
-      $tx = $self->ua->build_tx(uc $http_method => $path => $headers);
-    } elsif (((lc $http_method eq 'post') || (lc $http_method eq 'patch') || (lc $http_method eq 'put')) && (defined $optional_data)) {
-      $tx = $self->ua->build_tx(uc $http_method => $path => $headers => json => $optional_data);
-    } elsif (((lc $http_method eq 'post') || (lc $http_method eq 'patch') || (lc $http_method eq 'put')) && (!defined $optional_data)) {
-      $tx = $self->ua->build_tx(uc $http_method => $path => $headers);
+    if ( ( $http_method eq uc 'post' ) && !defined $optional_data ) {
+        warn 'Attention! You are using POST, but no payload specified';
     }
 
-  return $tx;
+    if ( lc $http_method eq 'get' ) {
+        $tx = $self->ua->build_tx(
+            uc $http_method => $path => $headers => form => $optional_data );
+    }
+    elsif ( lc $http_method eq 'delete' ) {
+        $tx = $self->ua->build_tx( uc $http_method => $path => $headers );
+    }
+    elsif (
+        (
+               ( lc $http_method eq 'post' )
+            || ( lc $http_method eq 'patch' )
+            || ( lc $http_method eq 'put' )
+        )
+        && ( defined $optional_data )
+      )
+    {
+        $tx = $self->ua->build_tx(
+            uc $http_method => $path => $headers => json => $optional_data );
+    }
+    elsif (
+        (
+               ( lc $http_method eq 'post' )
+            || ( lc $http_method eq 'patch' )
+            || ( lc $http_method eq 'put' )
+        )
+        && ( !defined $optional_data )
+      )
+    {
+        $tx = $self->ua->build_tx( uc $http_method => $path => $headers );
+    }
+
+    return $tx;
 
 }
-
 
 =head2 api_query
 
@@ -106,65 +140,75 @@ Returns L<Mojo::Message::Response> object
 =cut
 
 sub api_query {
-  my ($self, $params) = @_;
-  # warn "".(caller(0))[3]."() : ".Dumper \@_ if $self->debug;
+    my ( $self, $params ) = @_;
 
-  my $tx = $self->build_http_transaction($params);
-  # warn Dumper $tx;
-  # warn "transaction built ok";
+    # warn "".(caller(0))[3]."() : ".Dumper \@_ if $self->debug;
 
-  my $res = $self->ua->start($tx)->res;
+    my $tx = $self->build_http_transaction($params);
 
-  # In case if access_token expired
-  # warn $response->message; # Unauthorized
-  # warn $response->json->{error}{message}; # Invalid Credentials
-  # warn $response->code; # 401
-  # warn $response->is_error; # 1
+    # warn Dumper $tx;
+    # warn "transaction built ok";
 
-  # my $res = $self->ua->start($tx)->res->json;  # Mojo::Message::Response
+    my $res = $self->ua->start($tx)->res;
 
-  # for future:
-  # if ( grep { $_->{message} eq 'Invalid Credentials' && $_->{reason} eq 'authError'} @{$res->{error}{errors}} ) { ... }
+    # In case if access_token expired
+    # warn $response->message; # Unauthorized
+    # warn $response->json->{error}{message}; # Invalid Credentials
+    # warn $response->code; # 401
+    # warn $response->is_error; # 1
 
-  # warn "First api_query() result : ".Dumper $res if $self->debug;
-  # warn "Auto refresh:".$self->do_autorefresh;
+    # my $res = $self->ua->start($tx)->res->json;  # Mojo::Message::Response
 
-  # if ((defined $res->{error}) && ($self->autorefresh) && ($self->auth_storage->type) && ($self->auth_storage->path)) { # token expired error handling
+# for future:
+# if ( grep { $_->{message} eq 'Invalid Credentials' && $_->{reason} eq 'authError'} @{$res->{error}{errors}} ) { ... }
 
-  # https://metacpan.org/pod/Mojo::Message::Response#code
+    # warn "First api_query() result : ".Dumper $res if $self->debug;
+    # warn "Auto refresh:".$self->do_autorefresh;
 
-  # if ((defined $res->{error}) && ($self->do_autorefresh)) {
+# if ((defined $res->{error}) && ($self->autorefresh) && ($self->auth_storage->type) && ($self->auth_storage->path)) { # token expired error handling
 
-  if (($res->code == 401) && $self->do_autorefresh) {
+    # https://metacpan.org/pod/Mojo::Message::Response#code
 
-    my $attempt = 1;
+    # if ((defined $res->{error}) && ($self->do_autorefresh)) {
 
-    #while ($res->{error}{message} eq 'Invalid Credentials')  {
-    while ($res->code == 401)  {
+    if ( ( $res->code == 401 ) && $self->do_autorefresh ) {
 
-      warn "Seems like access_token was expired. Attemptimg update it automatically ...";
-      # warn "Seems like access_token was expired. Attemptimg update it automatically ..." if $self->debug;
+        my $attempt = 1;
 
-        if (!$self->user) { die "No user specified, so cant find refresh token and update access_token"; }
+        #while ($res->{error}{message} eq 'Invalid Credentials')  {
+        while ( $res->code == 401 ) {
 
-        my $cred = $self->auth_storage->get_credentials_for_refresh($self->user);   # get client_id, client_secret and refresh_token
-        my $new_token = $self->refresh_access_token($cred)->{access_token}; # here also {id_token} etc
-        warn "Got a new token: ".$new_token if $self->debug;
-        $self->access_token($new_token);
+            warn
+"Seems like access_token was expired. Attemptimg update it automatically ...";
 
-        if ($self->auto_update_tokens_in_storage) {
-          $self->auth_storage->set_access_token_to_storage($self->user, $self->access_token);
+# warn "Seems like access_token was expired. Attemptimg update it automatically ..." if $self->debug;
+
+            if ( !$self->user ) {
+                die
+"No user specified, so cant find refresh token and update access_token";
+            }
+
+            my $cred =
+              $self->auth_storage->get_credentials_for_refresh( $self->user )
+              ;    # get client_id, client_secret and refresh_token
+            my $new_token = $self->refresh_access_token($cred)->{access_token}
+              ;    # here also {id_token} etc
+            warn "Got a new token: " . $new_token if $self->debug;
+            $self->access_token($new_token);
+
+            if ( $self->auto_update_tokens_in_storage ) {
+                $self->auth_storage->set_access_token_to_storage( $self->user,
+                    $self->access_token );
+            }
+
+            $tx = $self->build_http_transaction($params);
+            $res = $self->ua->start($tx)->res;    # Mojo::Message::Response
         }
 
-        $tx = $self->build_http_transaction($params);
-        $res = $self->ua->start($tx)->res; # Mojo::Message::Response
     }
 
-  }
-
-  return $res; # Mojo::Message::Response
-};
-
+    return $res;                                  # Mojo::Message::Response
+}
 
 =method refresh_access_token
 
@@ -179,16 +223,22 @@ Get new access token for user from Google API server
 =cut
 
 sub refresh_access_token {
-  my ($self, $credentials) = @_;
+    my ( $self, $credentials ) = @_;
 
-  if ( (!defined $credentials->{client_id}) || (!defined $credentials->{client_secret}) || (!defined $credentials->{refresh_token}) ) {
-    die "Not enough credentials to refresh access_token. Check that you provided client_id, client_secret and refresh_token";
-  }
+    if (   ( !defined $credentials->{client_id} )
+        || ( !defined $credentials->{client_secret} )
+        || ( !defined $credentials->{refresh_token} ) )
+    {
+        die
+"Not enough credentials to refresh access_token. Check that you provided client_id, client_secret and refresh_token";
+    }
 
-  warn "Attempt to refresh access_token with params: ".Dumper $credentials if $self->debug;
-  $credentials->{grant_type} = 'refresh_token';
-  $self->ua->post('https://www.googleapis.com/oauth2/v4/token' => form => $credentials)->res->json; # tokens
-};
-
+    warn "Attempt to refresh access_token with params: " . Dumper $credentials
+      if $self->debug;
+    $credentials->{grant_type} = 'refresh_token';
+    $self->ua->post(
+        'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )
+      ->res->json;    # tokens
+}
 
 1;

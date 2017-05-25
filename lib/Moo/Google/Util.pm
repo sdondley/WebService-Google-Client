@@ -13,7 +13,6 @@ has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 
 use Data::Dumper;
 
-
 =method substitute_placeholders
 
   placeholderS (S)!
@@ -36,31 +35,35 @@ use Data::Dumper;
 =cut
 
 sub substitute_placeholders {
-  my ($self, $string, $parameters) = @_;
-  # find all parameters in string
-  my @matches = $string =~ /{([a-zA-Z_]+)}/g;
+    my ( $self, $string, $parameters ) = @_;
 
-  warn "Util substitute_placeholders() matches: ".Dumper \@matches if ($self->debug);
+    # find all parameters in string
+    my @matches = $string =~ /{([a-zA-Z_]+)}/g;
 
-  for my $prm (@matches) {
-    # warn $prm;
-    if (defined $parameters->{$prm}) {
-      my $s = $parameters->{$prm};
-      warn "Value of ".$prm." took from passed parameters: ".$s if ($self->debug);
-      $string =~ s/{$prm}/$s/g;
-    #}
-    #  elsif (defined $self->$prm) {
-    #   my $s = $self->$prm;
-    #   warn "Value of ".$prm." took from class attributes: ".$s;
-    #   $string =~ s/{$prm}/$s/g;
-    } else {
-      die "cant replace ".$prm." placeholder: no source";
+    warn "Util substitute_placeholders() matches: " . Dumper \@matches
+      if ( $self->debug );
+
+    for my $prm (@matches) {
+
+        # warn $prm;
+        if ( defined $parameters->{$prm} ) {
+            my $s = $parameters->{$prm};
+            warn "Value of " . $prm . " took from passed parameters: " . $s
+              if ( $self->debug );
+            $string =~ s/{$prm}/$s/g;
+
+            #}
+            #  elsif (defined $self->$prm) {
+            #   my $s = $self->$prm;
+            #   warn "Value of ".$prm." took from class attributes: ".$s;
+            #   $string =~ s/{$prm}/$s/g;
+        }
+        else {
+            die "cant replace " . $prm . " placeholder: no source";
+        }
     }
-  }
-  return $string;
+    return $string;
 }
-
-
 
 =method substitute_placeholder
 
@@ -74,20 +77,20 @@ but
 
 =cut
 
-
 sub substitute_placeholder {
-  my ($self, $string, $var) = @_;
-  my $param_name;
-  if ($string =~ /{([a-zA-Z]+)}/) {
-    $param_name = $1;
-  };
-  if (defined $var) {
-    $string =~ s/{([a-zA-Z]+)}/$var/;
-  } else {
-    my $subst = $self->$param_name;
-    $string =~ s/{([a-zA-Z]+)}/$subst/;
-  }
-  return $string;
+    my ( $self, $string, $var ) = @_;
+    my $param_name;
+    if ( $string =~ /{([a-zA-Z]+)}/ ) {
+        $param_name = $1;
+    }
+    if ( defined $var ) {
+        $string =~ s/{([a-zA-Z]+)}/$var/;
+    }
+    else {
+        my $subst = $self->$param_name;
+        $string =~ s/{([a-zA-Z]+)}/$subst/;
+    }
+    return $string;
 }
 
 1;

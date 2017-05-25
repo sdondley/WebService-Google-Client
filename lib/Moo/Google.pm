@@ -25,46 +25,69 @@ See unit test in xt folder for more examples
 
 =cut
 
-
-
 use Data::Dumper;
 use Moose;
 use Moo::Google::Client;
 
 has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
-has 'client' => ( is => 'ro', default => sub { Moo::Google::Client->new(debug=>shift->debug) }, handles => [qw(access_token user auth_storage do_autorefresh api_query)], lazy => 1 );
-has 'util' => ( is => 'ro', default => sub { require Moo::Google::Util; Moo::Google::Util->new(debug=>shift->debug) }, handles => [qw(substitute_placeholders)], lazy => 1 );
-has 'discovery' => ( is => 'ro', default => sub { require Moo::Google::Discovery; Moo::Google::Discovery->new(debug=>shift->debug) }, handles => [qw(getMethodMeta)], lazy => 1 );
-
+has 'client' => (
+    is      => 'ro',
+    default => sub { Moo::Google::Client->new( debug => shift->debug ) },
+    handles => [qw(access_token user auth_storage do_autorefresh api_query)],
+    lazy    => 1
+);
+has 'util' => (
+    is      => 'ro',
+    default => sub {
+        require Moo::Google::Util;
+        Moo::Google::Util->new( debug => shift->debug );
+    },
+    handles => [qw(substitute_placeholders)],
+    lazy    => 1
+);
+has 'discovery' => (
+    is      => 'ro',
+    default => sub {
+        require Moo::Google::Discovery;
+        Moo::Google::Discovery->new( debug => shift->debug );
+    },
+    handles => [qw(getMethodMeta)],
+    lazy    => 1
+);
 
 sub request {
-  my ($self, $caller, $params) = @_;
-  # my $caller = (caller(0))[3];
-  warn "Caller: ".$caller if ($self->debug);   # like Moo::Google::Calendar::Events::list
-  warn "request PARAMETERS: ".Dumper $params if ($self->debug);
+    my ( $self, $caller, $params ) = @_;
 
-  my $api_q_data = $self->getMethodMeta($caller);
-  $api_q_data->{options} = $params->{options};
-  delete $params->{options};
+    # my $caller = (caller(0))[3];
+    warn "Caller: " . $caller
+      if ( $self->debug );    # like Moo::Google::Calendar::Events::list
+    warn "request PARAMETERS: " . Dumper $params if ( $self->debug );
 
-  warn 'API query data: '.Dumper $api_q_data if ($self->debug);
-  # get $params from $caller object
-  # proxying $self->Service->Resource attributes
+    my $api_q_data = $self->getMethodMeta($caller);
+    $api_q_data->{options} = $params->{options};
+    delete $params->{options};
 
-  $api_q_data->{path} = $self->substitute_placeholders($api_q_data->{path}, $params);  # util
-  warn 'API query data: '.Dumper $api_q_data if ($self->debug);
-  $self->api_query($api_q_data); # path, httpMethod
-};
+    warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
+
+    # get $params from $caller object
+    # proxying $self->Service->Resource attributes
+
+    $api_q_data->{path} =
+      $self->substitute_placeholders( $api_q_data->{path}, $params );    # util
+    warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
+    $self->api_query($api_q_data);    # path, httpMethod
+}
 
 sub AUTOLOAD {
     my $self = shift;
     our $AUTOLOAD;
-    my $unknown_resource = (split(/::/, $AUTOLOAD))[-1]; # $unknown_method_name = API
-    warn $unknown_resource if ($self->debug);
+    my $unknown_resource =
+      ( split( /::/, $AUTOLOAD ) )[-1];    # $unknown_method_name = API
+    warn $unknown_resource if ( $self->debug );
     require Moo::Google::Services;
     my $a = Moo::Google::Services->new;
-    $a->debug($self->debug);
-    $a->generate_one($self, lcfirst $unknown_resource);
+    $a->debug( $self->debug );
+    $a->generate_one( $self, lcfirst $unknown_resource );
     $self->$unknown_resource;
 }
 
@@ -212,6 +235,5 @@ L<Google::API::Client> - source of inspiration
   youtubereporting : v1 : https://developers.google.com/youtube/reporting/v1/reports/
 
 =cut
-
 
 1;
