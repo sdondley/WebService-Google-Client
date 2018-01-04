@@ -38,7 +38,7 @@ sub substitute_placeholders {
     my ( $self, $string, $parameters ) = @_;
 
     # find all parameters in string
-    my @matches = $string =~ /{([a-zA-Z_]+)}/g;
+    my @matches = $string =~ /{[-+]?([a-zA-Z_]+)}/g;
 
     warn "Util substitute_placeholders() matches: " . Dumper \@matches
       if ( $self->debug );
@@ -50,7 +50,7 @@ sub substitute_placeholders {
             my $s = $parameters->{$prm};
             warn "Value of " . $prm . " took from passed parameters: " . $s
               if ( $self->debug );
-            $string =~ s/{$prm}/$s/g;
+            $string =~ s/{[+-]?$prm}/$s/g;
 
             #}
             #  elsif (defined $self->$prm) {
