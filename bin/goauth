@@ -93,6 +93,6 @@ sub runserver {
     say
 "Starting web server. Before authorization don't forget to set redirect_uri to http://127.0.0.1:$port/";
     $ENV{'GOAUTH_TOKENSFILE'} = $filename;
-    Mojolicious::Commands->start_app( 'Mojo::Google::Server', 'daemon', '-l',
+    Mojolicious::Commands->start_app( 'Moo::Google::Server', 'daemon', '-l',
         'http://*:' . $port );
 }
