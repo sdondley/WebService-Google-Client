@@ -139,7 +139,7 @@ __DATA__
 @@ oauth.html.ep
 
 <%= link_to "Click here to get Mojo tokens", $c->oauth2->auth_url("google",
-		scope => "email profile https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/calendar",
+		scope => "email profile https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/contacts.readonly",
 		authorize_query => { access_type => 'offline'} )
 %>
 
