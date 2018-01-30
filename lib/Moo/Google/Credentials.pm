@@ -1,4 +1,4 @@
-package Moo::Google::Credentials;
+package WebService::Google::Client::Credentials;
 
 # ABSTRACT: Credentials for particular Client instance. You can use this module as singleton also if you need to share credentials between two or more modules
 
@@ -9,7 +9,7 @@ has 'access_token' => ( is => 'rw' );
 has 'user' => ( is => 'rw', trigger => \&get_access_token_for_user )
   ;    # full gmail, like pavel.p.serikov@gmail.com
 has 'auth_storage' =>
-  ( is => 'rw', default => sub { Moo::Google::AuthStorage->new } )
+  ( is => 'rw', default => sub { WebService::Google::Client::AuthStorage->new } )
   ;    # dont delete to able to configure
 
 =method get_access_token_for_user

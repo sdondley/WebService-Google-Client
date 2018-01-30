@@ -1,4 +1,4 @@
-package Moo::Google::AuthStorage::ConfigJSON;
+package WebService::Google::Client::AuthStorage::ConfigJSON;
 
 # ABSTRACT: Specific methods to fetch tokens from JSON data sources
 

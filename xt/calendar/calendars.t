@@ -13,13 +13,13 @@ use feature 'say';
 use Test::More;
 
 # use lib 'lib'; # to test without dzil install
-use Moo::Google;
+use WebService::Google::Client;
 use Data::Dumper;
 use Data::Printer;
 $Data::Dumper::Maxdepth = 1;
 
-# $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "Moo::Google"); };
-# $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "Moo::Google::Client"); };
+# $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "WebService::Google::Client"); };
+# $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "WebService::Google::Client::Client"); };
 
 use Test::More;
 
@@ -30,7 +30,7 @@ my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
 
 # warn $user;
-my $gapi = Moo::Google->new( debug => 0 );
+my $gapi = WebService::Google::Client->new( debug => 0 );
 
 if ( $gapi->auth_storage->file_exists($default_file) ) {
     $gapi->auth_storage->setup( { type => 'jsonfile', path => $default_file } );

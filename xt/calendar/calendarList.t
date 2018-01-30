@@ -7,13 +7,13 @@ use Data::Dumper;
 use Data::Printer;
 $Data::Dumper::Maxdepth = 2;
 
-use Moo::Google;
+use WebService::Google::Client;
 
 use Test::More;
 
 my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
-my $gapi = Moo::Google->new( debug => 0 );
+my $gapi = WebService::Google::Client->new( debug => 0 );
 
 if ( $gapi->auth_storage->file_exists($default_file) ) {
     $gapi->auth_storage->setup( { type => 'jsonfile', path => $default_file } );

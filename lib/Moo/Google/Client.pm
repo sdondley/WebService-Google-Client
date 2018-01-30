@@ -1,10 +1,10 @@
-package Moo::Google::Client;
+package WebService::Google::Client::Client;
 
 # ABSTRACT: User Agent wrapper for working with Google APIs
 
 use Moo;
-use Moo::Google::Credentials;
-use Moo::Google::AuthStorage;
+use WebService::Google::Client::Credentials;
+use WebService::Google::Client::AuthStorage;
 use Mojo::UserAgent;
 use Data::Dumper;     # for debug
 use Data::Printer;    # for debug
@@ -16,7 +16,7 @@ has 'auto_update_tokens_in_storage' => ( is => 'rw', default => 1 );
 has 'debug'                         => ( is => 'rw', default => 0 );
 has 'credentials'                   => (
     is      => 'rw',
-    default => sub { Moo::Google::Credentials->instance },
+    default => sub { WebService::Google::Client::Credentials->instance },
     handles => [qw(access_token user auth_storage)],
     lazy    => 1
 );

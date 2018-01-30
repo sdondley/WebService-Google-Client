@@ -1,15 +1,15 @@
-package Moo::Google::AuthStorage;
+package WebService::Google::Client::AuthStorage;
 
 # ABSTRACT: Provide universal methods to fetch tokens from different types of data sources. Default is jsonfile
 
 use Moo;
 
-use Moo::Google::AuthStorage::ConfigJSON;
-use Moo::Google::AuthStorage::DBI;
-use Moo::Google::AuthStorage::MongoDB;
+use WebService::Google::Client::AuthStorage::ConfigJSON;
+use WebService::Google::Client::AuthStorage::DBI;
+use WebService::Google::Client::AuthStorage::MongoDB;
 
 has 'storage' =>
-  ( is => 'rw', default => sub { Moo::Google::AuthStorage::ConfigJSON->new } )
+  ( is => 'rw', default => sub { WebService::Google::Client::AuthStorage::ConfigJSON->new } )
   ;    # by default
 has 'is_set' => ( is => 'rw', default => 0 );
 
@@ -17,7 +17,7 @@ has 'is_set' => ( is => 'rw', default => 0 );
 
 Set appropriate storage
 
-  my $auth_storage = Moo::Google::AuthStorage->new;
+  my $auth_storage = WebService::Google::Client::AuthStorage->new;
   $auth_storage->setup; # by default will be config.json
   $auth_storage->setup({type => 'jsonfile', path => '/abs_path' });
   $auth_storage->setup({ type => 'dbi', path => 'DBI object' });
@@ -33,13 +33,13 @@ sub setup {
         $self->is_set(1);
     }
     elsif ( $params->{type} eq 'dbi' ) {
-        $self->storage( Moo::Google::AuthStorage::DBI->new );
+        $self->storage( WebService::Google::Client::AuthStorage::DBI->new );
         $self->storage->dbi( $params->{path} );
         $self->storage->setup;
         $self->is_set(1);
     }
     elsif ( $params->{type} eq 'mongo' ) {
-        $self->storage( Moo::Google::AuthStorage::MongoDB->new );
+        $self->storage( WebService::Google::Client::AuthStorage::MongoDB->new );
         $self->storage->mongo( $params->{path} );
         $self->storage->setup;
         $self->is_set(1);
@@ -74,7 +74,7 @@ Return all parameters that is needed for Mojo::Google::AutoTokenRefresh::refresh
 
 $c->get_credentials_for_refresh('examplemail@gmail.com')
 
-This method must have all subclasses of Moo::Google::AuthStorage
+This method must have all subclasses of WebService::Google::Client::AuthStorage
 
 =cut
 

@@ -1,4 +1,4 @@
-package Moo::Google::Discovery;
+package WebService::Google::Client::Discovery;
 
 # ABSTRACT: Methods for working with Google API discovery service
 
@@ -23,7 +23,7 @@ has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 
 Retrieve the description of a particular version of an API
 
-  my $d = Moo::Google::Discovery->new;
+  my $d = WebService::Google::Client::Discovery->new;
   $d->getRest({ api=> 'calendar', version => 'v3' });
 
 Return result like
@@ -227,14 +227,14 @@ sub searchInServices {
 
 Download metadata from Google API discovery for particular class method
 
-  $discovery->getResourceMeta('Moo::Google::Calendar::CalendarList::delete')
+  $discovery->getResourceMeta('WebService::Google::Client::Calendar::CalendarList::delete')
 
 =cut
 
 sub getMethodMeta {
     my ( $self, $caller ) = @_;
 
-    # $caller = 'Moo::Google::Calendar::CalendarList::delete';
+    # $caller = 'WebService::Google::Client::Calendar::CalendarList::delete';
     my @a = split( /::/, $caller );
 
     # warn Dumper \@a;
@@ -264,14 +264,14 @@ sub getMethodMeta {
 
 Download metadata from Google API discove for particular resource
 
-  $discovery->getResourceMeta('Moo::Google::Calendar::Events')
+  $discovery->getResourceMeta('WebService::Google::Client::Calendar::Events')
 
 =cut
 
 sub getResourceMeta {
     my ( $self, $package ) = @_;
 
-    # $package = 'Moo::Google::Calendar::Events';
+    # $package = 'WebService::Google::Client::Calendar::Events';
     my @a        = split( /::/, $package );
     my $resource = lcfirst pop @a;            # CalendarList
     my $service  = lc pop @a;                 # Calendar
@@ -290,7 +290,7 @@ sub getResourceMeta {
 
 Return array of methods that are available for particular resource
 
-  $discovery->listOfMethods('Moo::Google::Calendar::Events')
+  $discovery->listOfMethods('WebService::Google::Client::Calendar::Events')
 
 =cut
 

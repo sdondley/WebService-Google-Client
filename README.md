@@ -1,6 +1,6 @@
 # NAME
 
-Moo::Google - Server-side client library for any Google App API. Based on Moose
+WebService::Google::Client - Server-side client library for any Google App API. Based on Moose
 
 # VERSION
 
@@ -8,9 +8,9 @@ version 0.03
 
 # SYNOPSIS
 
-    use Moo::Google;
+    use WebService::Google::Client;
 
-    my $gapi = Moo::Google->new(debug => 0); # my $gapi = Moo::Google->new(access_token => '');
+    my $gapi = WebService::Google::Client->new(debug => 0); # my $gapi = WebService::Google::Client->new(access_token => '');
     my $user = 'pavelsr@cpan.org'; # full gmail
 
     $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
@@ -25,8 +25,6 @@ version 0.03
 
 To create authorization file with tokens in current folder run _goauth_ CLI tool
 
-(you will need to create your own app firstly at http://console.developers.google.com/ and turn on needed APIs)
-
 See unit test in xt folder for more examples
 
 # KEY FEATURES
@@ -36,11 +34,6 @@ See unit test in xt folder for more examples
 - Different app credentials (client\_id, client\_secret, users access\_token && refresh\_token) storage - json file, DBI, MongoDB (u can add your own even)
 - Automatic access\_token refresh (if user has refresh\_token) and saving refreshed token to storage
 - CLI tool (_goauth_) with lightweight server for easy OAuth2 authorization and getting access\_ and refresh\_ tokens
-
-TO DO:
-
-- Add dynamic different authorization scopes at Moo::Google::Server. By default it's only services that I tested:
-
 
 # SEE ALSO
 

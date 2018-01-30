@@ -1,4 +1,4 @@
-package Moo::Google::Util;
+package WebService::Google::Client::Util;
 
 # ABSTRACT: Portable functions
 

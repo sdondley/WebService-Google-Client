@@ -1,4 +1,4 @@
-package Moo::Google::Services;
+package WebService::Google::Client::Services;
 
 # ABSTRACT: generate classes, attributes and methods for appropriate API methods using Moose::Meta::Class
 
@@ -14,23 +14,23 @@ use Data::Printer;
 
 has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 
-# has 'client' => ( is => 'ro', default => sub { require Moo::Google::Client; Moo::Google::Client->new(); }, handles => [qw(api_query)], lazy => 1);
+# has 'client' => ( is => 'ro', default => sub { require WebService::Google::Client::Client; WebService::Google::Client::Client->new(); }, handles => [qw(api_query)], lazy => 1);
 
-# has 'util' => ( is => 'ro', default => sub { require Moo::Google::Util; Moo::Google::Util->new(); }, handles => [qw(substitute_placeholders)], lazy => 1);
+# has 'util' => ( is => 'ro', default => sub { require WebService::Google::Client::Util; WebService::Google::Client::Util->new(); }, handles => [qw(substitute_placeholders)], lazy => 1);
 
 has 'discovery' => (
     is      => 'ro',
     default => sub {
-        require Moo::Google::Discovery;
-        Moo::Google::Discovery->new( debug => shift->debug );
+        require WebService::Google::Client::Discovery;
+        WebService::Google::Client::Discovery->new( debug => shift->debug );
     },
     lazy => 1
 );
 
-# use Moo::Google::Discovery;
-# my $self->discovery = Moo::Google::Discovery->new(debug=>shift->debug);
+# use WebService::Google::Client::Discovery;
+# my $self->discovery = WebService::Google::Client::Discovery->new(debug=>shift->debug);
 
-# extends 'Moo::Google::Client';
+# extends 'WebService::Google::Client::Client';
 
 =method generate_one
 
@@ -72,7 +72,7 @@ sub generate_one {
 "No such service or its currently unsupported by Google API discovery";
     }
 
-    #my $base_class = 'Moo::Google::';  # $object
+    #my $base_class = 'WebService::Google::Client::';  # $object
     warn "Generating Resources for " . ref($object) . " class"
       if ( $self->debug );
     my $base_class         = ref($object);    # $object
@@ -133,7 +133,7 @@ sub generate_one {
 
     ## add attributes to this class
 
-    # adding to Moo::Google::Services
+    # adding to WebService::Google::Client::Services
 
     # $self->meta->add_attribute(
 
@@ -203,8 +203,8 @@ sub substitute_placeholders {
 }
 
 # has 'Calendar' => ( is => 'ro', default => sub {
-#   require Moo::Google::Calendar;
-#   Moo::Google::Calendar->new;
+#   require WebService::Google::Client::Calendar;
+#   WebService::Google::Client::Calendar->new;
 # });
 
 1;

@@ -1,12 +1,12 @@
-package Moo::Google;
+package WebService::Google::Client;
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
 
 =head1 SYNOPSIS
 
-    use Moo::Google;
+    use WebService::Google::Client;
 
-    my $gapi = Moo::Google->new(debug => 0); # my $gapi = Moo::Google->new(access_token => '');
+    my $gapi = WebService::Google::Client->new(debug => 0); # my $gapi = WebService::Google::Client->new(access_token => '');
     my $user = 'pavelsr@cpan.org'; # full gmail
 
     $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
@@ -27,20 +27,20 @@ See unit test in xt folder for more examples
 
 use Data::Dumper;
 use Moose;
-use Moo::Google::Client;
+use WebService::Google::Client::Client;
 
 has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 has 'client' => (
     is      => 'ro',
-    default => sub { Moo::Google::Client->new( debug => shift->debug ) },
+    default => sub { WebService::Google::Client::Client->new( debug => shift->debug ) },
     handles => [qw(access_token user auth_storage do_autorefresh api_query)],
     lazy    => 1
 );
 has 'util' => (
     is      => 'ro',
     default => sub {
-        require Moo::Google::Util;
-        Moo::Google::Util->new( debug => shift->debug );
+        require WebService::Google::Client::Util;
+        WebService::Google::Client::Util->new( debug => shift->debug );
     },
     handles => [qw(substitute_placeholders)],
     lazy    => 1
@@ -48,8 +48,8 @@ has 'util' => (
 has 'discovery' => (
     is      => 'ro',
     default => sub {
-        require Moo::Google::Discovery;
-        Moo::Google::Discovery->new( debug => shift->debug );
+        require WebService::Google::Client::Discovery;
+        WebService::Google::Client::Discovery->new( debug => shift->debug );
     },
     handles => [qw(getMethodMeta)],
     lazy    => 1
@@ -60,7 +60,7 @@ sub request {
 
     # my $caller = (caller(0))[3];
     warn "Caller: " . $caller
-      if ( $self->debug );    # like Moo::Google::Calendar::Events::list
+      if ( $self->debug );    # like WebService::Google::Client::Calendar::Events::list
     warn "request PARAMETERS: " . Dumper $params if ( $self->debug );
 
     my $api_q_data = $self->getMethodMeta($caller);
@@ -84,8 +84,8 @@ sub AUTOLOAD {
     my $unknown_resource =
       ( split( /::/, $AUTOLOAD ) )[-1];    # $unknown_method_name = API
     warn $unknown_resource if ( $self->debug );
-    require Moo::Google::Services;
-    my $a = Moo::Google::Services->new;
+    require WebService::Google::Client::Services;
+    my $a = WebService::Google::Client::Services->new;
     $a->debug( $self->debug );
     $a->generate_one( $self, lcfirst $unknown_resource );
     $self->$unknown_resource;

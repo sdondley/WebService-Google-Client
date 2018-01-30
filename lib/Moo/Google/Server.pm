@@ -1,5 +1,5 @@
 #!perl
-package Moo::Google::Server;
+package WebService::Google::Client::Server;
 
 # ABSTRACT: Mojolicious::Lite web server for getting Google Mojo tokens via Oauth 2.0
 

@@ -1,4 +1,4 @@
-Moo::Google is an example of object-oriented programming
+WebService::Google::Client is an example of object-oriented programming
 
 Below are specific examples that may be useful when developing this module
 

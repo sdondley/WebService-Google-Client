@@ -13,7 +13,7 @@ use DateTime;
 use DateTime::Format::RFC3339;
 my $formatter = DateTime::Format::RFC3339->new();
 
-use Moo::Google;
+use WebService::Google::Client;
 
 use Test::More;
 
@@ -21,7 +21,7 @@ my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
 
 # my $user = $ENV{'GMAIL_FOR_TESTING'} || 'fablab61ru@gmail.com';
-my $gapi = Moo::Google->new( debug => 0 );
+my $gapi = WebService::Google::Client->new( debug => 0 );
 
 if ( $gapi->auth_storage->file_exists($default_file) ) {
     $gapi->auth_storage->setup( { type => 'jsonfile', path => $default_file } );
@@ -55,7 +55,7 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
                                 )
                             )
                         },
-                        summary => "Moo::Google test event number" . $i
+                        summary => "WebService::Google::Client test event number" . $i
                     }
                 }
             )->json;
