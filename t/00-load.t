@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok('WebService::Google') || print "Bail out!\n";
+    use_ok('WebService::Google::Client') || print "Bail out!\n";
 }
 
-diag("Testing WebService::Google $WebService::Google::VERSION, Perl $], $^X");
+diag("Testing WebService::Google::Client $WebService::Google::Client::VERSION, Perl $], $^X");
