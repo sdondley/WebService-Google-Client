@@ -1,4 +1,4 @@
-package WebService::Google;
+package WebService::Google::Client;
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
 
