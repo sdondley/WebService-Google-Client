@@ -1,4 +1,4 @@
-package WebService::Google::Client::Client;
+package WebService::Google::Client;
 
 # ABSTRACT: User Agent wrapper for working with Google APIs
 

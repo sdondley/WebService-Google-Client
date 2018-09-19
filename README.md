@@ -1,6 +1,6 @@
 # NAME
 
-WebService::Google::Client - Server-side client library for any Google App API. Based on Moose
+WebService::Google - Server-side client library for any Google App API. Based on Moose
 
 # VERSION
 

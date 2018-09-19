@@ -1,4 +1,4 @@
-package WebService::Google::Client;
+package WebService::Google;
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
 
@@ -27,12 +27,12 @@ See unit test in xt folder for more examples
 
 use Data::Dumper;
 use Moose;
-use WebService::Google::Client::Client;
+use WebService::Google::Client;
 
 has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 has 'client' => (
     is      => 'ro',
-    default => sub { WebService::Google::Client::Client->new( debug => shift->debug ) },
+    default => sub { WebService::Google::Client->new( debug => shift->debug ) },
     handles => [qw(access_token user auth_storage do_autorefresh api_query)],
     lazy    => 1
 );

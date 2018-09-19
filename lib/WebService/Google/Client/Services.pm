@@ -30,7 +30,7 @@ has 'discovery' => (
 # use WebService::Google::Client::Discovery;
 # my $self->discovery = WebService::Google::Client::Discovery->new(debug=>shift->debug);
 
-# extends 'WebService::Google::Client::Client';
+# extends 'WebService::Google::Client';
 
 =method generate_one
 
