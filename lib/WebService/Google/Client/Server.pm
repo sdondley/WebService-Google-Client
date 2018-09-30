@@ -143,7 +143,9 @@ __DATA__
 		authorize_query => { access_type => 'offline'} )
 %>
 
-<br><br>
+<br>
+NB: Scopes are currently hard coded in Server.pm
+<br>
 
 <a href="https://developers.google.com/+/web/api/rest/oauth#authorization-scopes">
 Check more about authorization scopes</a>
