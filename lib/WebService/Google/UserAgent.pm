@@ -47,9 +47,9 @@ sub build_headers {
   Example of usage:
 
       $gapi->build_http_transaction({
-        method => 'post',
-        route => 'https://www.googleapis.com/calendar/users/me/calendarList',
-        payload => { key => value }
+        httpMethod => 'post',
+        path => 'https://www.googleapis.com/calendar/users/me/calendarList',
+        options => { key => value }
       })
 
 =cut
