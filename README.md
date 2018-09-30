@@ -4,7 +4,7 @@ WebService::Google::Client - Server-side client library for any Google App API. 
 
 # VERSION
 
-version 0.03
+version 0.04
 
 # SYNOPSIS
 
@@ -125,7 +125,7 @@ See unit test in xt folder for more examples
     pubsub : v1beta1a,v1,v1beta2 : https://cloud.google.com/pubsub/docs
     qpxExpress : v1 : http://developers.google.com/qpx-express
     replicapool : v1beta1,v1beta2 : https://developers.google.com/compute/docs/replica-pool/,https://developers.google.com/compute/docs/instance-groups/manager/v1beta2
-    replicapoolupdater : v1beta1 : https://cloud.google.com/compute/docs/instance-groups/manager/#applying_rolling_updates_using_the_updater_service
+    https://cloud.google.com/compute/docs/instance-groups/manager/#applying_rolling_updates_using_the_updater_service
     reseller : v1 : https://developers.google.com/google-apps/reseller/
     resourceviews : v1beta1,v1beta2 : https://developers.google.com/compute/
     runtimeconfig : v1,v1beta1 : https://cloud.google.com/deployment-manager/runtime-configurator/
@@ -146,8 +146,6 @@ See unit test in xt folder for more examples
     storage : v1,v1beta1,v1beta2 : https://developers.google.com/storage/docs/json_api/
     storagetransfer : v1 : https://cloud.google.com/storage/transfer
     supportcases : v2 : https://sites.google.com/a/google.com/cases/
-    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
-    surveys : v2 :
     tagmanager : v1,v2 : https://developers.google.com/tag-manager/api/v1/,https://developers.google.com/tag-manager/api/v2/
     taskqueue : v1beta1,v1beta2 : https://developers.google.com/appengine/docs/python/taskqueue/rest
     tasks : v1 : https://developers.google.com/google-apps/tasks/firstapp
