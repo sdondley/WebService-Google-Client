@@ -35,10 +35,6 @@ See unit test in xt folder for more examples
 - Automatic access\_token refresh (if user has refresh\_token) and saving refreshed token to storage
 - CLI tool (_goauth_) with lightweight server for easy OAuth2 authorization and getting access\_ and refresh\_ tokens
 
-# LIMITATIONS
-
-- NB this is a work in progress - use beyond the Calendar API requires some fiddling. eg. scope in the CLI tool (_goauth_) is hard coded etc.
-
 # SEE ALSO
 
 [API::Google](https://metacpan.org/pod/API::Google) - my old lib
@@ -78,6 +74,8 @@ See unit test in xt folder for more examples
     cloudtrace : v1 : https://cloud.google.com/trace
     clouduseraccounts : alpha,beta,vm_alpha,vm_beta : https://cloud.google.com/compute/docs/access/user-accounts/api/latest/
     compute : alpha,beta,v1 : https://developers.google.com/compute/docs/reference/latest/
+    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
+    consumersurveys : v2 :
     container : v1 : https://cloud.google.com/container-engine/
     content : v2sandbox,v2 : https://developers.google.com/shopping-content
     customsearch : v1 : https://developers.google.com/custom-search/v1/using_rest
@@ -125,7 +123,7 @@ See unit test in xt folder for more examples
     pubsub : v1beta1a,v1,v1beta2 : https://cloud.google.com/pubsub/docs
     qpxExpress : v1 : http://developers.google.com/qpx-express
     replicapool : v1beta1,v1beta2 : https://developers.google.com/compute/docs/replica-pool/,https://developers.google.com/compute/docs/instance-groups/manager/v1beta2
-    https://cloud.google.com/compute/docs/instance-groups/manager/#applying_rolling_updates_using_the_updater_service
+    replicapoolupdater : v1beta1 : https://cloud.google.com/compute/docs/instance-groups/manager/#applying_rolling_updates_using_the_updater_service
     reseller : v1 : https://developers.google.com/google-apps/reseller/
     resourceviews : v1beta1,v1beta2 : https://developers.google.com/compute/
     runtimeconfig : v1,v1beta1 : https://cloud.google.com/deployment-manager/runtime-configurator/
@@ -146,6 +144,8 @@ See unit test in xt folder for more examples
     storage : v1,v1beta1,v1beta2 : https://developers.google.com/storage/docs/json_api/
     storagetransfer : v1 : https://cloud.google.com/storage/transfer
     supportcases : v2 : https://sites.google.com/a/google.com/cases/
+    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
+    surveys : v2 :
     tagmanager : v1,v2 : https://developers.google.com/tag-manager/api/v1/,https://developers.google.com/tag-manager/api/v2/
     taskqueue : v1beta1,v1beta2 : https://developers.google.com/appengine/docs/python/taskqueue/rest
     tasks : v1 : https://developers.google.com/google-apps/tasks/firstapp
@@ -163,10 +163,6 @@ See unit test in xt folder for more examples
 # AUTHOR
 
 Pavel Serikov <pavelsr@cpan.org>
-
-# CONTRIBUTORS
-
-Peter Scott <peter@pscott.com.au>
 
 # COPYRIGHT AND LICENSE
 

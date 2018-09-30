@@ -77,6 +77,7 @@ helper get_email => sub {
 
 get "/" => sub {
     my $c = shift;
+    $c->{config} = $config;
     app->log->info(
         "Will store tokens at" . $config->getFilename( $config->pathToFile ) );
     if ( $c->param('code') ) {
@@ -134,18 +135,28 @@ get "/" => sub {
 
 app->start;
 
+=pod
+<%=
+$config->get('gapi/scopes');
+%>
+scope => $c->{config}->get('gapi/scopes'), ##
+
+=cut
+
 __DATA__
 
 @@ oauth.html.ep
 
 <%= link_to "Click here to get Mojo tokens", $c->oauth2->auth_url("google",
-		scope => "email profile https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/contacts.readonly",
+		scope => $c->{config}->get('gapi/scopes'), ## scope => "email profile https://www.googleapis.com/auth/plus.profile.emails.read https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/contacts.readonly",
 		authorize_query => { access_type => 'offline'} )
 %>
 
 <br>
-NB: Scopes are currently hard coded in Server.pm
+NB: Scopes are currently hard coded in WebService::Google::Client::Server -- 
+
 <br>
 
 <a href="https://developers.google.com/+/web/api/rest/oauth#authorization-scopes">
 Check more about authorization scopes</a>
+Once you have a token in your config.json you can check the available scopes with curl using <pre>curl https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=<YOUR_ACCESS_TOKEN></pre>

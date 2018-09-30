@@ -33,3 +33,5 @@ nytprof.out
 *.bs
 /_eumm/
 /.idea/
+/examples/config.json
+
