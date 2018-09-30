@@ -35,6 +35,10 @@ See unit test in xt folder for more examples
 - Automatic access\_token refresh (if user has refresh\_token) and saving refreshed token to storage
 - CLI tool (_goauth_) with lightweight server for easy OAuth2 authorization and getting access\_ and refresh\_ tokens
 
+# LIMITATIONS
+
+- NB this is a work in progress - use beyond the Calendar API requires some fiddling. eg. scope in the CLI tool (_goauth_) is hard coded etc.
+
 # SEE ALSO
 
 [API::Google](https://metacpan.org/pod/API::Google) - my old lib
@@ -74,8 +78,6 @@ See unit test in xt folder for more examples
     cloudtrace : v1 : https://cloud.google.com/trace
     clouduseraccounts : alpha,beta,vm_alpha,vm_beta : https://cloud.google.com/compute/docs/access/user-accounts/api/latest/
     compute : alpha,beta,v1 : https://developers.google.com/compute/docs/reference/latest/
-    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
-    consumersurveys : v2 :
     container : v1 : https://cloud.google.com/container-engine/
     content : v2sandbox,v2 : https://developers.google.com/shopping-content
     customsearch : v1 : https://developers.google.com/custom-search/v1/using_rest
@@ -164,9 +166,13 @@ See unit test in xt folder for more examples
 
 Pavel Serikov <pavelsr@cpan.org>
 
+# CONTRIBUTORS
+
+Peter Scott <peter@pscott.com.au>
+
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2017 by Pavel Serikov.
+This software is copyright (c) 2017-2018 by Pavel Serikov.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
