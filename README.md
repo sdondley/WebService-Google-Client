@@ -164,6 +164,12 @@ See unit test in xt folder for more examples
 
 Pavel Serikov <pavelsr@cpan.org>
 
+# CONTRIBUTORS
+
+- sdondley <s@dondley.com>
+- Pavel Serikov <pavel.p.serikov@gmail.com>
+- dafinder <mattdw@gmail.com>
+
 # COPYRIGHT AND LICENSE
 
 This software is copyright (c) 2017 by Pavel Serikov.
