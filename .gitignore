@@ -1,7 +1,6 @@
 /lib/API/Google/GMail.pm
 /gapi.conf
-/Moo-Google-0.01.tar.gz
-/Moo-Google-0.01
+/Moo-Google-*
 
 /CODE_REVIEW.MD
 
