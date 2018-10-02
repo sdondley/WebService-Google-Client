@@ -56,7 +56,8 @@ Return result like
 
 =cut
 
-sub getRest {
+sub getRest 
+{
     my ( $self, $params ) = @_;
     return $self->ua->get( 'https://www.googleapis.com/discovery/v1/apis/'
           . $params->{api} . '/'
@@ -70,7 +71,8 @@ sub getRest {
 
 =cut
 
-sub discover_all {
+sub discover_all 
+{
     shift->ua->get('https://www.googleapis.com/discovery/v1/apis')
       ->result->json;
 }
@@ -88,10 +90,12 @@ Useful when printing list of supported API's in documentation
 
 =cut
 
-sub availableAPIs {
+sub availableAPIs 
+{
     my $self = shift;
     my $all  = $self->discover_all()->{items};
-    for my $i (@$all) {
+    for my $i (@$all) 
+    {
         $i = { map { $_ => $i->{$_} }
               grep { exists $i->{$_} } qw/name version documentationLink/ };
     }
@@ -102,20 +106,17 @@ sub availableAPIs {
           # my @a = map { $_->{name} } @$all;
 
     my @arr;
-    for my $s (@subset) {
+    for my $s (@subset) 
+    {
         my @v = map { $_->{version} } grep { $_->{name} eq $s } @$all;
-        my @doclinks =
-          uniq map { $_->{documentationLink} } grep { $_->{name} eq $s } @$all;
+        my @doclinks = uniq mxap { $_->{documentationLink} } grep { $_->{name} eq $s } @$all;
 
         # warn "Match! :".Dumper \@v;
         # my $versions = grep
         push @arr, { name => $s, versions => \@v, doclinks => \@doclinks };
     }
-
     return \@arr;
-
     # warn Dumper \@arr;
-
     # return \@a;
 }
 
@@ -128,7 +129,8 @@ Return 1 if service is supported by Google API discovery. Otherwise return 0
 
 =cut
 
-sub exists {
+sub exists 
+{
     my ( $self, $api ) = @_;
     my $apis_all = $self->availableAPIs();
     my $res = grep { $_->{name} eq $api } @$apis_all;
@@ -140,10 +142,12 @@ sub exists {
 
 =cut
 
-sub printSupported {
+sub printSupported 
+{
     my $self     = shift;
     my $apis_all = $self->availableAPIs();
-    for my $api (@$apis_all) {
+    for my $api (@$apis_all) 
+    {
         print $api->{name} . ' : '
           . join( ',', @{ $api->{versions} } ) . ' : '
           . join( ',', @{ $api->{doclinks} } ) . "\n";
@@ -161,7 +165,8 @@ sub printSupported {
 
 =cut
 
-sub availableVersions {
+sub availableVersions 
+{
     my ( $self, $api ) = @_;
     my $apis_all = $self->availableAPIs();
     my @api_target = grep { $_->{name} eq $api } @$apis_all;
@@ -181,13 +186,16 @@ sub availableVersions {
 
 =cut
 
-sub latestStableVersion {
+sub latestStableVersion 
+{
     my ( $self, $api ) = @_;
     my $versions = $self->availableVersions($api);    # arrayref
-    if ( $versions->[-1] =~ /beta/ ) {
+    if ( $versions->[-1] =~ /beta/ ) 
+    {
         return $versions->[0];
     }
-    else {
+    else 
+    {
         return $versions->[-1];
     }
 }
@@ -198,7 +206,8 @@ Return only APIs with multiple versions available
 
 =cut
 
-sub findAPIsWithDiffVers {
+sub findAPIsWithDiffVers 
+{
     my $self = shift;
     my $all  = $self->availableAPIs();
     grep { scalar @{ $_->{versions} } > 1 } @$all;
@@ -213,7 +222,8 @@ sub findAPIsWithDiffVers {
 
 =cut
 
-sub searchInServices {
+sub searchInServices 
+{
     my ( $self, $string ) = @_;
 
     # warn Dumper $self->availableAPIs();
@@ -231,7 +241,8 @@ Download metadata from Google API discovery for particular class method
 
 =cut
 
-sub getMethodMeta {
+sub getMethodMeta 
+{
     my ( $self, $caller ) = @_;
 
     # $caller = 'WebService::Google::Client::Calendar::CalendarList::delete';
@@ -241,10 +252,8 @@ sub getMethodMeta {
     my $method   = pop @a;            # delete
     my $resource = lcfirst pop @a;    # CalendarList
     my $service  = lc pop @a;         # Calendar
-    my $service_data =
-      $self->searchInServices($service);    # was string, become hash
-    warn "getResourcesMeta:service_data : " . Dumper $service_data
-      if ( $self->debug );
+    my $service_data = $self->searchInServices($service);    # was string, become hash
+    warn "getResourcesMeta:service_data : " . Dumper $service_data if ( $self->debug );
 
     my $all = $self->getRest(
         {
@@ -253,9 +262,8 @@ sub getMethodMeta {
         }
     );
     my $baseUrl = $all->{baseUrl};
-    my $resource_data =
-      $all->{resources}{$resource};         # return just a list of all methods
-    my $method_data = $resource_data->{methods}{$method};    # need httpMethod
+    my $resource_data =  $all->{resources}{$resource};         # return just a list of all methods
+    my $method_data   = $resource_data->{methods}{$method};    # need httpMethod
     $method_data->{path} = $baseUrl . $method_data->{path};
     my $res = slice $method_data, qw/httpMethod path id/;
 }
@@ -268,7 +276,8 @@ Download metadata from Google API discove for particular resource
 
 =cut
 
-sub getResourceMeta {
+sub getResourceMeta 
+{
     my ( $self, $package ) = @_;
 
     # $package = 'WebService::Google::Client::Calendar::Events';
@@ -294,7 +303,8 @@ Return array of methods that are available for particular resource
 
 =cut
 
-sub listOfMethods {
+sub listOfMethods 
+{
     my ( $self, $package ) = @_;
     my $r = $self->getResourceMeta($package);
     my @a = keys %{ $r->{methods} };
@@ -310,19 +320,23 @@ sub listOfMethods {
 
 =cut
 
-sub metaForAPI {
+sub metaForAPI 
+{
     my ( $self, $params ) = @_;
     my $full = $self->discovery_full;
     my @a;
 
-    if ( defined $params->{api} ) {
+    if ( defined $params->{api} ) 
+    {
         @a = grep { $_->{name} eq $params->{api} } @{ $full->{items} };
     }
-    else {
+    else 
+    {
         die "metaForAPI() : No api specified!";
     }
 
-    if ( defined $params->{version} ) {
+    if ( defined $params->{version} ) 
+    {
         @a = grep { $_->{version} eq $params->{version} } @a;
     }
 

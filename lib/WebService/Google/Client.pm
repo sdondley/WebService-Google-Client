@@ -1,6 +1,6 @@
 package WebService::Google::Client;
 
-# ABSTRACT: Server-side client library for any Google App API. Based on Moose
+# ABSTRACT: Client library for any Google Cloud API Services. Based on Moose
 
 =head1 SYNOPSIS
 
@@ -10,8 +10,8 @@ package WebService::Google::Client;
     my $user = 'pavelsr@cpan.org'; # full gmail
 
     $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
-    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });
-    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' });
+    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });  ## NOT IMPLEMENTED
+    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' }); ## NOT IMPLEMENTED
 
     $gapi->user($user);
     $gapi->do_autorefresh(1);
@@ -21,7 +21,7 @@ package WebService::Google::Client;
 
 To create authorization file with tokens in current folder run I<goauth> CLI tool
 
-See unit test in xt folder for more examples
+See unit test in xt folder for more examples and some use cases for specific APIS in the /examples folder
 
 =cut
 
@@ -55,12 +55,12 @@ has 'discovery' => (
     lazy    => 1
 );
 
-sub request {
+sub request 
+{
     my ( $self, $caller, $params ) = @_;
 
     # my $caller = (caller(0))[3];
-    warn "Caller: " . $caller
-      if ( $self->debug );    # like WebService::Google::Client::Calendar::Events::list
+    warn "Caller: " . $caller if ( $self->debug );    # like WebService::Google::Client::Calendar::Events::list
     warn "request PARAMETERS: " . Dumper $params if ( $self->debug );
 
     my $api_q_data = $self->getMethodMeta($caller);
@@ -72,13 +72,13 @@ sub request {
     # get $params from $caller object
     # proxying $self->Service->Resource attributes
 
-    $api_q_data->{path} =
-      $self->substitute_placeholders( $api_q_data->{path}, $params );    # util
+    $api_q_data->{path} = $self->substitute_placeholders( $api_q_data->{path}, $params );    # util
     warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
     $self->api_query($api_q_data);    # path, httpMethod
 }
 
-sub AUTOLOAD {
+sub AUTOLOAD 
+{
     my $self = shift;
     our $AUTOLOAD;
     my $unknown_resource =
@@ -101,6 +101,8 @@ sub AUTOLOAD {
 
 =item Different app credentials (client_id, client_secret, users access_token && refresh_token) storage - json file, DBI, MongoDB (u can add your own even)
 
+=item TODO: DBI and MongoDB not currently implemented
+
 =item Automatic access_token refresh (if user has refresh_token) and saving refreshed token to storage
 
 =item CLI tool (I<goauth>) with lightweight server for easy OAuth2 authorization and getting access_ and refresh_ tokens
@@ -109,13 +111,13 @@ sub AUTOLOAD {
 
 =head1 SEE ALSO
 
-L<API::Google> - my old lib
+L<API::Google> - An older lib this was originally based on
 
-L<Google::API::Client> - source of inspiration
+L<Google::API::Client> - Original source of inspiration
 
 =cut
 
-=head1 SUPPORTED APIs
+=head1 POTENTIALLY SUPPORTED APIs
 
   acceleratedmobilepageurl : v1 : https://developers.google.com/amp/cache/
   adexchangebuyer : v1.2,v1.3,v1.4 : https://developers.google.com/ad-exchange/buyer-rest
@@ -148,7 +150,6 @@ L<Google::API::Client> - source of inspiration
   cloudtrace : v1 : https://cloud.google.com/trace
   clouduseraccounts : alpha,beta,vm_alpha,vm_beta : https://cloud.google.com/compute/docs/access/user-accounts/api/latest/
   compute : alpha,beta,v1 : https://developers.google.com/compute/docs/reference/latest/
-  Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
   consumersurveys : v2 :
   container : v1 : https://cloud.google.com/container-engine/
   content : v2sandbox,v2 : https://developers.google.com/shopping-content
@@ -218,7 +219,6 @@ L<Google::API::Client> - source of inspiration
   storage : v1,v1beta1,v1beta2 : https://developers.google.com/storage/docs/json_api/
   storagetransfer : v1 : https://cloud.google.com/storage/transfer
   supportcases : v2 : https://sites.google.com/a/google.com/cases/
-  Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
   surveys : v2 :
   tagmanager : v1,v2 : https://developers.google.com/tag-manager/api/v1/,https://developers.google.com/tag-manager/api/v2/
   taskqueue : v1beta1,v1beta2 : https://developers.google.com/appengine/docs/python/taskqueue/rest

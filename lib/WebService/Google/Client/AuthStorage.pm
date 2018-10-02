@@ -9,8 +9,7 @@ use WebService::Google::Client::AuthStorage::DBI;
 use WebService::Google::Client::AuthStorage::MongoDB;
 
 has 'storage' =>
-  ( is => 'rw', default => sub { WebService::Google::Client::AuthStorage::ConfigJSON->new } )
-  ;    # by default
+  ( is => 'rw', default => sub { WebService::Google::Client::AuthStorage::ConfigJSON->new } );    # by default
 has 'is_set' => ( is => 'rw', default => 0 );
 
 =method setup
@@ -25,7 +24,8 @@ Set appropriate storage
 
 =cut
 
-sub setup {
+sub setup 
+{
     my ( $self, $params ) = @_;
     if ( $params->{type} eq 'jsonfile' ) {
         $self->storage->pathToTokensFile( $params->{path} );
@@ -44,7 +44,8 @@ sub setup {
         $self->storage->setup;
         $self->is_set(1);
     }
-    else {
+    else 
+    {
         die "Unknown storage type. Allowed types are jsonfile, dbi and mongo";
     }
 }
@@ -56,7 +57,8 @@ Function is used to speed up unit testing.
 
 =cut
 
-sub file_exists {
+sub file_exists 
+{
     my ( $self, $filename ) = @_;
     if ( -e $filename ) {
         return 1;
@@ -78,17 +80,20 @@ This method must have all subclasses of WebService::Google::Client::AuthStorage
 
 =cut
 
-sub get_credentials_for_refresh {
+sub get_credentials_for_refresh 
+{
     my ( $self, $user ) = @_;
     $self->storage->get_credentials_for_refresh($user);
 }
 
-sub get_access_token_from_storage {
+sub get_access_token_from_storage 
+{
     my ( $self, $user ) = @_;
     $self->storage->get_access_token_from_storage($user);
 }
 
-sub set_access_token_to_storage {
+sub set_access_token_to_storage 
+{
     my ( $self, $user, $access_token ) = @_;
     $self->storage->set_access_token_to_storage( $user, $access_token );
 }

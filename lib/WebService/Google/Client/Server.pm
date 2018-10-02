@@ -153,8 +153,6 @@ __DATA__
 %>
 
 <br>
-NB: Scopes are currently hard coded in WebService::Google::Client::Server -- 
-
 <br>
 
 <a href="https://developers.google.com/+/web/api/rest/oauth#authorization-scopes">

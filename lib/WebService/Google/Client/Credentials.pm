@@ -1,6 +1,7 @@
 package WebService::Google::Client::Credentials;
 
-# ABSTRACT: Credentials for particular Client instance. You can use this module as singleton also if you need to share credentials between two or more modules
+# ABSTRACT: Credentials for particular Client instance. You can use this module as singleton also if you need to share 
+#           credentials between two or more modules
 
 use Moo;
 with 'MooX::Singleton';
@@ -26,7 +27,7 @@ sub get_access_token_for_user {
             $self->auth_storage->get_access_token_from_storage( $self->user ) );
     }
     else {
-        die "Can get access token for specified user because storage isnt set";
+        die "Can get access token for specified user because storage isn't set";
     }
 }
 

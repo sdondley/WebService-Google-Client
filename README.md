@@ -160,13 +160,14 @@ See unit test in xt folder for more examples
     youtubeAnalytics : v1,v1beta1 : http://developers.google.com/youtube/analytics/
     youtubereporting : v1 : https://developers.google.com/youtube/reporting/v1/reports/
 
-# AUTHOR
+# AUTHORS
 
-Pavel Serikov <pavelsr@cpan.org>
+- Pavel Serikov <pavelsr@cpan.org>
+- Peter Scott <peter@pscott.com.au>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2017-2018 by Pavel Serikov.
+This software is copyright (c) 2017-2018 by Pavel Serikov, Peter Scott.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

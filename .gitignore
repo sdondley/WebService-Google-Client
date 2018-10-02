@@ -1,5 +1,4 @@
 /lib/API/Google/GMail.pm
-/gapi.conf
 /Moo-Google-0.01.tar.gz
 /Moo-Google-0.01
 
@@ -34,4 +33,6 @@ nytprof.out
 /_eumm/
 /.idea/
 /examples/config.json
-
+/config.json
+/gapi.conf
+/gapi.json
