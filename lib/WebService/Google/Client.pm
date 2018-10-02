@@ -116,8 +116,9 @@ L<Google::API::Client> - source of inspiration
 =cut
 
 =head1 SUPPORTED APIs
+
     SERVICE                     VERSIONS                                   DOCUMENTATION
-    abusiveexperiencereport      v1                                         https://developers.google.com/abusive-experience-report/
+    abusiveexperiencereport     v1                                         https://developers.google.com/abusive-experience-report/
     acceleratedmobilepageurl    v1                                         https://developers.google.com/amp/cache/
     adexchangebuyer             v1.2, v1.3, v1.4                           https://developers.google.com/ad-exchange/buyer-rest
     adexchangebuyer2            v2beta1                                    https://developers.google.com/ad-exchange/buyer-rest/reference/rest/
