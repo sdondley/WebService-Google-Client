@@ -6,7 +6,7 @@ package goauth;
 
 =head1 SYNOPSIS
 
-    goauth [tokens.json]
+    goauth [tokens.json] 
 
     By default if will create config.json in current directory
 
@@ -48,7 +48,7 @@ else {
 
 if ( -e $filename ) {
     say "File $filename exists";
-    input_if_not_exists( [ 'gapi/client_id', 'gapi/client_secret' ] );
+    input_if_not_exists( [ 'gapi/client_id', 'gapi/client_secret', 'gapi/scopes' ] );
     runserver();
 }
 else {
@@ -65,9 +65,15 @@ sub setup {
     chomp( $oauth->{client_id} = <STDIN> );
     print "client_secret: ";
     chomp( $oauth->{client_secret} = <STDIN> );
+
+    print "scopes ( space sep list): ";
+    chomp( $oauth->{scopes} = <STDIN> );
+    
+
     my $tokensfile = Config::JSON->create($filename);
     $tokensfile->set( 'gapi/client_id',     $oauth->{client_id} );
     $tokensfile->set( 'gapi/client_secret', $oauth->{client_secret} );
+    $tokensfile->set( 'gapi/scopes', $oauth->{scopes} );
     say 'OAuth details was updated!';
 
     # Remove comment for Mojolicious::Plugin::JSONConfig compatibility
