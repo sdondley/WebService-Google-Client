@@ -143,10 +143,16 @@ sub exists {
 sub printSupported {
     my $self     = shift;
     my $apis_all = $self->availableAPIs();
+    printf("%-27s %-42s %s\n", 'SERVICE', 'VERSIONS', 'DOCUMENTATION');
     for my $api (@$apis_all) {
-        print $api->{name} . ' : '
-          . join( ',', @{ $api->{versions} } ) . ' : '
-          . join( ',', @{ $api->{doclinks} } ) . "\n";
+      my $docs = @{ $api->{doclinks} }[0]
+                 ? join( ', ', @{ $api->{doclinks} })
+                 : 'unavailable';
+      printf("%-27s %-42s %s\n",
+              $api->{name},
+              join( ', ', @{ $api->{versions} } ),
+              $docs,
+      );
     }
 }
 
