@@ -1,6 +1,7 @@
 /lib/API/Google/GMail.pm
 /gapi.conf
 /Moo-Google-*
+/WebService-Google-*
 /.attic
 
 /CODE_REVIEW.MD
