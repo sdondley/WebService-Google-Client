@@ -9,7 +9,7 @@ $Data::Dumper::Maxdepth = 2;
 
 use WebService::Google::Client;
 
-use Test::More;
+use Test::More tests => 3;
 
 my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';

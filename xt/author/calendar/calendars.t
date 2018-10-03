@@ -21,7 +21,7 @@ $Data::Dumper::Maxdepth = 1;
 # $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "WebService::Google::Client"); };
 # $SIG{'__WARN__'} = sub { warn $_[0] unless (caller eq "WebService::Google::Client::Client"); };
 
-use Test::More;
+use Test::More tests => 6;
 
 # use Test::More tests => 3;
 

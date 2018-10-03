@@ -15,7 +15,7 @@ my $formatter = DateTime::Format::RFC3339->new();
 
 use WebService::Google::Client;
 
-use Test::More;
+use Test::More tests => 3;
 
 my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
@@ -111,19 +111,24 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
 
     # delete one event from @event_ids
 
-    subtest 'Events->delete' => sub {
-        my $r1 =
-          $gapi->Calendar->Events->list( { calendarId => $calendarId } )->json;
-        my $n1        = scalar @{ $r1->{items} };
-        my $id_to_del = $event_ids[0];                     # may do rand
-        my $r2        = $gapi->Calendar->Events->delete(
-            { calendarId => $calendarId, eventId => $id_to_del } );
-        my $r3 =
-          $gapi->Calendar->Events->list( { calendarId => $calendarId } )->json;
-        my $n2 = scalar @{ $r3->{items} };
-        ok( $r2->code == 204, 'response code is 204' );
-        ok( $n2 eq $n1 - 1,   'items minus 1' );
-    };
+    # TODO: This test is useless for calendars with more than 250 events find a better
+    #  way to test
+
+#    subtest 'Events->delete' => sub {
+#        my $r1        = $gapi->Calendar->Events->list( { calendarId => $calendarId } )->json;
+#        my $n1        = scalar @{ $r1->{items} };
+#        warn $n1;
+#        my $id_to_del = $event_ids[0];                     # may do rand
+#        my $r2        = $gapi->Calendar->Events->delete(
+#            { calendarId => $calendarId, eventId => $id_to_del } );
+#        my $r3 =
+#          $gapi->Calendar->Events->list( { calendarId => $calendarId } )->json;
+#        my $n2 = scalar @{ $r3->{items} };
+#        ok( $r2->code == 204, 'response code is 204' );
+#        warn $n2;
+#        warn $n1;
+#        ok( $n2 eq $n1 - 1,   'items minus 1' );
+#    };
 
 }
 else {
