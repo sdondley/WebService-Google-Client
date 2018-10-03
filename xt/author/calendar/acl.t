@@ -11,7 +11,7 @@ $Data::Dumper::Maxdepth = 3;
 
 use WebService::Google::Client;
 
-use Test::More;
+use Test::More tests => 4;
 
 my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
@@ -40,7 +40,7 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
           $t->{items}[0]{id};    # will be like 'user:pavel.p.serikov@gmail.com'
     };
 
-    # warn $acl_rule_id;
+    warn $acl_rule_id;
 
     subtest 'Acl->get' => sub {
         my $t = $gapi->Calendar->Acl->get(
@@ -52,7 +52,9 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
         );
         ok( $t->{id} eq $acl_rule_id,
             "got Acl id with right id (previously listed first)" );
+        warn Dumper $t;
     };
+
 
     subtest 'Acl->insert' => sub {
         my $t = $gapi->Calendar->Acl->insert(
@@ -60,7 +62,7 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
                 calendarId => 'primary',
                 options    => {
                     role  => 'freeBusyReader',
-                    scope => { type => 'user', value => 'pavesr@cpan.org' },
+                    scope => { type => 'user', value => 'kjsdkf@cpan.org' },
                 }
             }
         )->json;
@@ -82,8 +84,8 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
                 calendarId => 'primary',
                 ruleId     => $inserted_acl_rule_id,
                 options    => {
-                    role  => 'freeBusyReader',
-                    scope => { type => 'user', value => 'serikov@it.rksi.ru' }
+                    role  => 'none',
+                    scope => { type => 'user', value => 'kjsdkf@cpan.org' }
                 }
             }
         )->json;
