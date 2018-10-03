@@ -1,5 +1,5 @@
 package WebService::Google::Client::Services;
-
+our $VERSION = '0.04';
 # ABSTRACT: generate classes, attributes and methods for appropriate API methods using Moose::Meta::Class
 
 use Moose;

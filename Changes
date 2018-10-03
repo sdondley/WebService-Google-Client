@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+0.03      2018-10-03 13:50:52-04:00 America/New_York
   - This is a fork of Moo::Google v0.03 which appears to have been abandoned,
     original author unresponsive since January, 2018. Many thanks for his work.
   - Renamed module to WebService::Google::Client.

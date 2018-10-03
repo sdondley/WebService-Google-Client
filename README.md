@@ -185,11 +185,10 @@ See unit test in xt folder for more examples
 
 # AUTHOR
 
-Steve Dondley <sdondley@gmail.org>
+Steve Dondley <s@dondley.com>
 
 # CONTRIBUTORS
 
-- Steve Dondley <s@dondley.com>
 - Pavel Serikov <pavelsr@cpan.org>
 - Pavel Serikov <pavel.p.serikov@gmail.com>
 - dafinder <mattdw@gmail.com>
