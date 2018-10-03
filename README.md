@@ -185,17 +185,18 @@ See unit test in xt folder for more examples
 
 # AUTHOR
 
-Pavel Serikov <pavelsr@cpan.org>
+Steve Dondley <sdondley@gmail.org>
 
 # CONTRIBUTORS
 
 - Steve Dondley <s@dondley.com>
+- Pavel Serikov <pavelsr@cpan.org>
 - Pavel Serikov <pavel.p.serikov@gmail.com>
 - dafinder <mattdw@gmail.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2018 by Pavel Serikov.
+This software is copyright (c) 2018 by Steve Dondley.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
