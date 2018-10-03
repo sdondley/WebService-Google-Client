@@ -6,6 +6,10 @@ package WebService::Google::Client::Discovery;
 
 https://developers.google.com/discovery/v1/reference/
 
+=head2 SEE ALSO
+
+https://github.com/APIs-guru/openapi-directory/tree/master/APIs/googleapis.com for Swagger Specs.
+
 =cut
 
 use Moo;
@@ -15,9 +19,9 @@ use Hash::Slice qw/slice/;
 
 use Data::Dumper;
 
-has 'ua' => ( is => 'ro', default => sub { Mojo::UserAgent->new }, lazy => 1 );
+has 'ua'             => ( is => 'ro', default => sub { Mojo::UserAgent->new }, lazy => 1 );
 has 'discovery_full' => ( is => 'ro', default => \&discover_all, lazy => 1 );
-has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
+has 'debug'          => ( is => 'rw', default => 0, lazy => 1 );
 
 =method getRest
 
@@ -73,8 +77,7 @@ sub getRest
 
 sub discover_all 
 {
-    shift->ua->get('https://www.googleapis.com/discovery/v1/apis')
-      ->result->json;
+    shift->ua->get('https://www.googleapis.com/discovery/v1/apis')->result->json;
 }
 
 =method getRest
@@ -270,7 +273,7 @@ sub getMethodMeta
 
 =method getResourceMeta
 
-Download metadata from Google API discove for particular resource
+Download metadata from Google API discovery for particular resource
 
   $discovery->getResourceMeta('WebService::Google::Client::Calendar::Events')
 

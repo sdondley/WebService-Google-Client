@@ -28,6 +28,13 @@ sub get_credentials_for_refresh
     };
 }
 
+sub get_token_emails_from_storage
+{
+    my $tokens = $tokensfile->get('gapi/tokens');
+    return [keys %$tokens];
+}
+
+
 sub get_client_id_from_storage 
 {
     $tokensfile->get('gapi/client_id');

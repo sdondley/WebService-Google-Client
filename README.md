@@ -1,6 +1,6 @@
 # NAME
 
-WebService::Google::Client - Server-side client library for any Google App API. Based on Moose
+WebService::Google::Client - Client library for any Google Cloud API Services. Based on Moose
 
 # VERSION
 
@@ -14,8 +14,8 @@ version 0.04
     my $user = 'pavelsr@cpan.org'; # full gmail
 
     $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
-    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });
-    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' });
+    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });  ## NOT IMPLEMENTED
+    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' }); ## NOT IMPLEMENTED
 
     $gapi->user($user);
     $gapi->do_autorefresh(1);
@@ -25,23 +25,24 @@ version 0.04
 
 To create authorization file with tokens in current folder run _goauth_ CLI tool
 
-See unit test in xt folder for more examples
+See unit test in xt folder for more examples and some use cases for specific APIS in the /examples folder
 
 # KEY FEATURES
 
 - Object-oriented calls by API->Resource->method schema. Like $gapi->Calendar->Events->lists
 - Classes are generated dynamically using [Moose::Meta::Class](https://metacpan.org/pod/Moose::Meta::Class) based on Google API Discovery Service
 - Different app credentials (client\_id, client\_secret, users access\_token && refresh\_token) storage - json file, DBI, MongoDB (u can add your own even)
+- TODO: DBI and MongoDB not currently implemented
 - Automatic access\_token refresh (if user has refresh\_token) and saving refreshed token to storage
 - CLI tool (_goauth_) with lightweight server for easy OAuth2 authorization and getting access\_ and refresh\_ tokens
 
 # SEE ALSO
 
-[API::Google](https://metacpan.org/pod/API::Google) - my old lib
+[API::Google](https://metacpan.org/pod/API::Google) - An older lib this was originally based on
 
-[Google::API::Client](https://metacpan.org/pod/Google::API::Client) - source of inspiration
+[Google::API::Client](https://metacpan.org/pod/Google::API::Client) - Original source of inspiration
 
-# SUPPORTED APIs
+# POTENTIALLY SUPPORTED APIs
 
     acceleratedmobilepageurl : v1 : https://developers.google.com/amp/cache/
     adexchangebuyer : v1.2,v1.3,v1.4 : https://developers.google.com/ad-exchange/buyer-rest
@@ -74,7 +75,6 @@ See unit test in xt folder for more examples
     cloudtrace : v1 : https://cloud.google.com/trace
     clouduseraccounts : alpha,beta,vm_alpha,vm_beta : https://cloud.google.com/compute/docs/access/user-accounts/api/latest/
     compute : alpha,beta,v1 : https://developers.google.com/compute/docs/reference/latest/
-    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
     consumersurveys : v2 :
     container : v1 : https://cloud.google.com/container-engine/
     content : v2sandbox,v2 : https://developers.google.com/shopping-content
@@ -144,7 +144,6 @@ See unit test in xt folder for more examples
     storage : v1,v1beta1,v1beta2 : https://developers.google.com/storage/docs/json_api/
     storagetransfer : v1 : https://cloud.google.com/storage/transfer
     supportcases : v2 : https://sites.google.com/a/google.com/cases/
-    Use of uninitialized value in join or string at lib/Moo/Google/Discovery.pm line 139.
     surveys : v2 :
     tagmanager : v1,v2 : https://developers.google.com/tag-manager/api/v1/,https://developers.google.com/tag-manager/api/v2/
     taskqueue : v1beta1,v1beta2 : https://developers.google.com/appengine/docs/python/taskqueue/rest

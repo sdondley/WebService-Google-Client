@@ -57,7 +57,8 @@ sub build_headers
 
 =cut
 
-sub build_http_transaction {
+sub build_http_transaction 
+{
     my ( $self, $params ) = @_;
 
     # warn "".(caller(0))[3]."() : ".Dumper \@_;
@@ -112,14 +113,12 @@ sub build_http_transaction {
     {
         $tx = $self->ua->build_tx( uc $http_method => $path => $headers );
     }
-
     return $tx;
-
 }
 
 =head2 api_query
 
-Low-level method that can make any API query to any Google service
+Low-level method that can make any API query to a Google API service
 
 Required params: method, route
 
@@ -128,14 +127,14 @@ $self->access_token must be valid
 Examples of usage:
 
   $gapi->api_query({
-      method => 'get',
-      route => 'https://www.googleapis.com/calendar/users/me/calendarList',
+      httpMethod => 'get',
+      path => 'https://www.googleapis.com/calendar/users/me/calendarList',
     });
 
   $gapi->api_query({
-      method => 'post',
-      route => 'https://www.googleapis.com/calendar/v3/calendars/'.$calendar_id.'/events',
-      payload => { key => value }
+      httpMethod => 'post',
+      path => 'https://www.googleapis.com/calendar/v3/calendars/'.$calendar_id.'/events',
+      options => { key => value }
   }
 
 
@@ -143,12 +142,13 @@ Returns L<Mojo::Message::Response> object
 
 =cut
 
-sub api_query {
+sub api_query 
+{
     my ( $self, $params ) = @_;
 
     # warn "".(caller(0))[3]."() : ".Dumper \@_ if $self->debug;
 
-    my $tx = $self->build_http_transaction($params);
+    my $tx = $self->build_http_transaction( $params );
 
     # warn Dumper $tx;
     # warn "transaction built ok";
@@ -196,15 +196,14 @@ sub api_query {
               $self->auth_storage->get_credentials_for_refresh( $self->user );     # get client_id, client_secret and refresh_token
             my $new_token = $self->refresh_access_token($cred)->{access_token};    # here also {id_token} etc
             warn "Got a new token: " . $new_token if $self->debug;
-            $self->access_token($new_token);
+            $self->access_token( $new_token );
 
             if ( $self->auto_update_tokens_in_storage ) 
             {
-                $self->auth_storage->set_access_token_to_storage( $self->user,
-                    $self->access_token );
+                $self->auth_storage->set_access_token_to_storage( $self->user, $self->access_token );
             }
-            $tx = $self->build_http_transaction($params);
-            $res = $self->ua->start($tx)->res;    # Mojo::Message::Response
+            $tx = $self->build_http_transaction( $params );
+            $res = $self->ua->start( $tx )->res;    # Mojo::Message::Response
         }
 
     }
@@ -217,7 +216,7 @@ sub api_query {
 Get new access token for user from Google API server
 
   $self->refresh_access_token({
-		client_id => '',
+		client_id     => '',
 		client_secret => '',
 		refresh_token => ''
 	})
@@ -237,9 +236,7 @@ sub refresh_access_token
 
     warn "Attempt to refresh access_token with params: " . Dumper $credentials if $self->debug;
     $credentials->{grant_type} = 'refresh_token';
-    $self->ua->post(
-        'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )
-      ->res->json;    # tokens
+    $self->ua->post( 'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )->res->json;    # tokens
 }
 
 1;
