@@ -1,4 +1,4 @@
-package WebService::Google::Client::Client;
+package WebService::Google::UserAgent;
 
 # ABSTRACT: User Agent wrapper for working with Google APIs
 
@@ -23,7 +23,8 @@ has 'credentials'                   => (
 
 # Keep access_token in headers always actual
 
-sub build_headers {
+sub build_headers 
+{
 
     # warn "".(caller(0))[3]."() : ".Dumper \@_;
     my $self = shift;
@@ -32,11 +33,13 @@ sub build_headers {
     my $headers = {};
 
     # warn "build_headers: ".$self->access_token;
-    if ( $self->access_token ) {
+    if ( $self->access_token ) 
+    {
         $headers->{'Authorization'} = 'Bearer ' . $self->access_token;
         return $headers;
     }
-    else {
+    else 
+    {
         die 'No access_token, cant build headers';
     }
 
@@ -47,42 +50,44 @@ sub build_headers {
   Example of usage:
 
       $gapi->build_http_transaction({
-        method => 'post',
-        route => 'https://www.googleapis.com/calendar/users/me/calendarList',
-        payload => { key => value }
+        httpMethod => 'post',
+        path => 'https://www.googleapis.com/calendar/users/me/calendarList',
+        options => { key => value }
       })
 
 =cut
 
-sub build_http_transaction {
+sub build_http_transaction 
+{
     my ( $self, $params ) = @_;
 
     # warn "".(caller(0))[3]."() : ".Dumper \@_;
 
     my $headers = $self->build_headers;
-    warn "build_http_transaction HEADERS: " . Dumper $headers
-      if ( $self->debug );
+    warn "build_http_transaction HEADERS: " . Dumper $headers  if ( $self->debug );
 
     # Hash key names
     my $http_method   = $params->{httpMethod};    # uppercase
     my $path          = $params->{path};
     my $optional_data = $params->{options};
-    warn "build_http_transaction() Options: " . Dumper $optional_data
-      if ( $self->debug );
+    warn "build_http_transaction() Options: " . Dumper $optional_data if ( $self->debug );
 
     my $tx;
 
     if ( !defined $http_method ) { die 'No http method specified' }
 
-    if ( ( $http_method eq uc 'post' ) && !defined $optional_data ) {
+    if ( ( $http_method eq uc 'post' ) && !defined $optional_data ) 
+    {
         warn 'Attention! You are using POST, but no payload specified';
     }
 
-    if ( lc $http_method eq 'get' ) {
+    if ( lc $http_method eq 'get' ) 
+    {
         $tx = $self->ua->build_tx(
             uc $http_method => $path => $headers => form => $optional_data );
     }
-    elsif ( lc $http_method eq 'delete' ) {
+    elsif ( lc $http_method eq 'delete' ) 
+    {
         $tx = $self->ua->build_tx( uc $http_method => $path => $headers );
     }
     elsif (
@@ -108,14 +113,12 @@ sub build_http_transaction {
     {
         $tx = $self->ua->build_tx( uc $http_method => $path => $headers );
     }
-
     return $tx;
-
 }
 
 =head2 api_query
 
-Low-level method that can make any API query to any Google service
+Low-level method that can make any API query to a Google API service
 
 Required params: method, route
 
@@ -124,14 +127,14 @@ $self->access_token must be valid
 Examples of usage:
 
   $gapi->api_query({
-      method => 'get',
-      route => 'https://www.googleapis.com/calendar/users/me/calendarList',
+      httpMethod => 'get',
+      path => 'https://www.googleapis.com/calendar/users/me/calendarList',
     });
 
   $gapi->api_query({
-      method => 'post',
-      route => 'https://www.googleapis.com/calendar/v3/calendars/'.$calendar_id.'/events',
-      payload => { key => value }
+      httpMethod => 'post',
+      path => 'https://www.googleapis.com/calendar/v3/calendars/'.$calendar_id.'/events',
+      options => { key => value }
   }
 
 
@@ -139,12 +142,13 @@ Returns L<Mojo::Message::Response> object
 
 =cut
 
-sub api_query {
+sub api_query 
+{
     my ( $self, $params ) = @_;
 
     # warn "".(caller(0))[3]."() : ".Dumper \@_ if $self->debug;
 
-    my $tx = $self->build_http_transaction($params);
+    my $tx = $self->build_http_transaction( $params );
 
     # warn Dumper $tx;
     # warn "transaction built ok";
@@ -171,38 +175,35 @@ sub api_query {
 
     # if ((defined $res->{error}) && ($self->do_autorefresh)) {
 
-    if ( ( $res->code == 401 ) && $self->do_autorefresh ) {
+    if ( ( $res->code == 401 ) && $self->do_autorefresh ) 
+    {
 
         my $attempt = 1;
 
         #while ($res->{error}{message} eq 'Invalid Credentials')  {
-        while ( $res->code == 401 ) {
+        while ( $res->code == 401 ) 
+        {
 
-            warn
-"Seems like access_token was expired. Attemptimg update it automatically ...";
+            warn "Seems like access_token was expired. Attemptimg to update it automatically ...";
+            # warn "Seems like access_token was expired. Attemptimg update it automatically ..." if $self->debug;
 
-# warn "Seems like access_token was expired. Attemptimg update it automatically ..." if $self->debug;
-
-            if ( !$self->user ) {
-                die
-"No user specified, so cant find refresh token and update access_token";
+            if ( !$self->user ) 
+            {
+                die "No user specified, so cant find refresh token and update access_token";
             }
 
             my $cred =
-              $self->auth_storage->get_credentials_for_refresh( $self->user )
-              ;    # get client_id, client_secret and refresh_token
-            my $new_token = $self->refresh_access_token($cred)->{access_token}
-              ;    # here also {id_token} etc
+              $self->auth_storage->get_credentials_for_refresh( $self->user );     # get client_id, client_secret and refresh_token
+            my $new_token = $self->refresh_access_token($cred)->{access_token};    # here also {id_token} etc
             warn "Got a new token: " . $new_token if $self->debug;
-            $self->access_token($new_token);
+            $self->access_token( $new_token );
 
-            if ( $self->auto_update_tokens_in_storage ) {
-                $self->auth_storage->set_access_token_to_storage( $self->user,
-                    $self->access_token );
+            if ( $self->auto_update_tokens_in_storage ) 
+            {
+                $self->auth_storage->set_access_token_to_storage( $self->user, $self->access_token );
             }
-
-            $tx = $self->build_http_transaction($params);
-            $res = $self->ua->start($tx)->res;    # Mojo::Message::Response
+            $tx = $self->build_http_transaction( $params );
+            $res = $self->ua->start( $tx )->res;    # Mojo::Message::Response
         }
 
     }
@@ -215,30 +216,27 @@ sub api_query {
 Get new access token for user from Google API server
 
   $self->refresh_access_token({
-		client_id => '',
+		client_id     => '',
 		client_secret => '',
 		refresh_token => ''
 	})
 
 =cut
 
-sub refresh_access_token {
+sub refresh_access_token 
+{
     my ( $self, $credentials ) = @_;
 
     if (   ( !defined $credentials->{client_id} )
         || ( !defined $credentials->{client_secret} )
         || ( !defined $credentials->{refresh_token} ) )
     {
-        die
-"Not enough credentials to refresh access_token. Check that you provided client_id, client_secret and refresh_token";
+        die "Not enough credentials to refresh access_token. Check that you provided client_id, client_secret and refresh_token";
     }
 
-    warn "Attempt to refresh access_token with params: " . Dumper $credentials
-      if $self->debug;
+    warn "Attempt to refresh access_token with params: " . Dumper $credentials if $self->debug;
     $credentials->{grant_type} = 'refresh_token';
-    $self->ua->post(
-        'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )
-      ->res->json;    # tokens
+    $self->ua->post( 'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )->res->json;    # tokens
 }
 
 1;

@@ -30,7 +30,7 @@ has 'discovery' => (
 # use WebService::Google::Client::Discovery;
 # my $self->discovery = WebService::Google::Client::Discovery->new(debug=>shift->debug);
 
-# extends 'WebService::Google::Client::Client';
+# extends 'WebService::Google::Client';
 
 =method generate_one
 
@@ -44,7 +44,8 @@ has 'discovery' => (
 
 =cut
 
-sub generate_one {
+sub generate_one 
+{
     my ( $self, $object, $p ) = @_;    # $p = parameter(s)
 
     warn Dumper ref($p) if ( $self->debug );
@@ -52,24 +53,28 @@ sub generate_one {
     my $api;
     my $version;
 
-    if ($p) {
+    if ($p) 
+    {
         $api = $p;
     }
-    elsif ( ref($p) eq 'HASH' ) {
+    elsif ( ref($p) eq 'HASH' ) 
+    {
         $api = $p->{api};
     }
-    else {
+    else 
+    {
         die "Wrong parameters type. Supported are HASH or SCALAR";
     }
 
     warn $api if ( $self->debug );
 
-    if ( $self->discovery->exists($api) ) {
+    if ( $self->discovery->exists($api) ) 
+    {
         $version = $self->discovery->latestStableVersion($api);
     }
-    else {
-        die
-"No such service or its currently unsupported by Google API discovery";
+    else 
+    {
+        die "No such service or its currently unsupported by Google API discovery";
     }
 
     #my $base_class = 'WebService::Google::Client::';  # $object
@@ -92,7 +97,8 @@ sub generate_one {
 
     my @resources = keys %{ $service_description->{resources} };
 
-    for my $resource_name (@resources) {
+    for my $resource_name (@resources) 
+    {
         my $resource_class_name = ucfirst $resource_name;
         my $resource_class      = Moose::Meta::Class->create(
             join(
@@ -108,14 +114,14 @@ sub generate_one {
             }
         );
 
-        my $methods_hash =
-          $service_description->{resources}{$resource_name}{methods}
-          ; # return like { 'get' => 'HASH(0x3deeb48)', 'list' => 'HASH(0x3e18698)', ... }
+        my $methods_hash = $service_description->{resources}{$resource_name}{methods};
+            # return like { 'get' => 'HASH(0x3deeb48)', 'list' => 'HASH(0x3e18698)', ... }
             # warn Dumper $methods_hash;
 
         my @methods = keys %$methods_hash;
 
-        for my $method_name (@methods) {
+        for my $method_name (@methods) 
+        {
             $resource_class->add_method(
                 $method_name => sub {
                     my ( $self, $params ) = @_;
@@ -153,13 +159,15 @@ sub generate_one {
 
 =cut
 
-sub generate_all {
+sub generate_all 
+{
     my $self     = shift;
     my $services = $self->discovery->availableAPIs();
 
     # warn "All services: ".Dumper $services;
 
-    for my $s (@$services) {
+    for my $s (@$services) 
+    {
         $self->generate_one( $s->{name} );
     }
 
@@ -177,7 +185,8 @@ sub generate_all {
 #   $self->api_query($api_q_data); # path, httpMethod
 # };
 
-sub substitute_placeholders {
+sub substitute_placeholders 
+{
     my ( $self, $string, $parameters ) = @_;
 
     # find all parameters in string
@@ -185,17 +194,20 @@ sub substitute_placeholders {
     for my $prm (@matches) {
 
         # warn $prm;
-        if ( defined $parameters->{$prm} ) {
+        if ( defined $parameters->{$prm} ) 
+        {
             my $s = $parameters->{$prm};
             warn "Value of " . $prm . " took from passed parameters: " . $s;
             $string =~ s/{$prm}/$s/g;
         }
-        elsif ( defined $self->$prm ) {
+        elsif ( defined $self->$prm ) 
+        {
             my $s = $self->$prm;
             warn "Value of " . $prm . " took from class attributes: " . $s;
             $string =~ s/{$prm}/$s/g;
         }
-        else {
+        else 
+        {
             die "cant replace " . $prm . " placeholder: no source";
         }
     }
