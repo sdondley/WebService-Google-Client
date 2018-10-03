@@ -3,7 +3,6 @@
 use 5.006;
 use strict;
 use warnings;
-use feature 'say';
 
 use Data::Dumper;
 use Data::Printer;
@@ -11,7 +10,7 @@ $Data::Dumper::Maxdepth = 1;
 
 use WebService::Google::Client;
 
-use Test::More;
+use Test::More tests => 1;
 
 my $default_file = $ENV{'GOOGLE_TOKENSFILE'} || 'gapi.conf';
 my $user         = $ENV{'GMAIL_FOR_TESTING'} || 'pavel.p.serikov@gmail.com';
@@ -28,7 +27,7 @@ if ( $gapi->auth_storage->file_exists($default_file) ) {
 
 }
 else {
-    say 'Cant run test cause json file with tokens not exists!';
+    diag 'Cant run test cause json file with tokens not exists!';
 }
 
 done_testing();
