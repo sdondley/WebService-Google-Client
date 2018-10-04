@@ -1,5 +1,5 @@
 package WebService::Google::Client::Server ;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 # ABSTRACT: Mojolicious::Lite web server for getting Google Mojo tokens via Oauth 2.0
 
 use Mojolicious::Lite;
