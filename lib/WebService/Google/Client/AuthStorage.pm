@@ -1,5 +1,5 @@
 package WebService::Google::Client::AuthStorage ;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # ABSTRACT: Provide universal methods to fetch tokens from different types of data sources. Default is jsonfile
 
 use Moo;

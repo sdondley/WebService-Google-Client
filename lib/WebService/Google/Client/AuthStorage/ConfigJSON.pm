@@ -1,5 +1,5 @@
 package WebService::Google::Client::AuthStorage::ConfigJSON ;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 # ABSTRACT: Specific methods to fetch tokens from JSON data sources
 
 use Moo;
