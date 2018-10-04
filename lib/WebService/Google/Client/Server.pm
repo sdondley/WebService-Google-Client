@@ -1,4 +1,4 @@
-package WebService::Google::Client::Server;
+package WebService::Google::Client::Server ;
 our $VERSION = '0.04';
 # ABSTRACT: Mojolicious::Lite web server for getting Google Mojo tokens via Oauth 2.0
 
@@ -10,6 +10,7 @@ use Crypt::JWT qw(decode_jwt);
 use feature 'say';
 use Mojo::Util 'getopt';
 use Mojolicious::Plugin::OAuth2;
+use Log::Log4perl::Shortcuts qw(:all);
 
 # use Mojo::JWT;
 

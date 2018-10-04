@@ -1,4 +1,4 @@
-package WebService::Google::Client::Discovery;
+package WebService::Google::Client::Discovery ;
 our $VERSION = '0.04';
 # ABSTRACT: Methods for working with Google API discovery service
 
@@ -12,12 +12,12 @@ use Moo;
 use Mojo::UserAgent;
 use List::Util qw(uniq);
 use Hash::Slice qw/slice/;
+use Log::Log4perl::Shortcuts qw(:all);
 
 use Data::Dumper;
 
 has 'ua' => ( is => 'ro', default => sub { Mojo::UserAgent->new }, lazy => 1 );
 has 'discovery_full' => ( is => 'ro', default => \&discover_all, lazy => 1 );
-has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 
 =method getRest
 
@@ -249,8 +249,8 @@ sub getMethodMeta {
     my $service  = lc pop @a;         # Calendar
     my $service_data =
       $self->searchInServices($service);    # was string, become hash
-    warn "getResourcesMeta:service_data : " . Dumper $service_data
-      if ( $self->debug );
+#    warn "getResourcesMeta:service_data : " . Dumper $service_data
+#      if ( $self->debug );
 
     my $all = $self->getRest(
         {

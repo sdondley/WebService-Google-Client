@@ -1,4 +1,4 @@
-package WebService::Google::Client::AuthStorage;
+package WebService::Google::Client::AuthStorage ;
 our $VERSION = '0.04';
 # ABSTRACT: Provide universal methods to fetch tokens from different types of data sources. Default is jsonfile
 
@@ -7,6 +7,7 @@ use Moo;
 use WebService::Google::Client::AuthStorage::ConfigJSON;
 use WebService::Google::Client::AuthStorage::DBI;
 use WebService::Google::Client::AuthStorage::MongoDB;
+use Log::Log4perl::Shortcuts qw(:all);
 
 has 'storage' =>
   ( is => 'rw', default => sub { WebService::Google::Client::AuthStorage::ConfigJSON->new } )

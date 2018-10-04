@@ -1,9 +1,10 @@
-package WebService::Google::Client::AuthStorage::ConfigJSON;
+package WebService::Google::Client::AuthStorage::ConfigJSON ;
 our $VERSION = '0.04';
 # ABSTRACT: Specific methods to fetch tokens from JSON data sources
 
 use Moo;
 use Config::JSON;
+use Log::Log4perl::Shortcuts qw(:all);
 
 has 'pathToTokensFile' => ( is => 'rw', default => 'config.json' )
   ;    # default is config.json

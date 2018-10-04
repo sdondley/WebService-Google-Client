@@ -1,4 +1,4 @@
-package WebService::Google::Client::Util;
+package WebService::Google::Client::Util ;
 our $VERSION = '0.04';
 # ABSTRACT: Portable functions
 
@@ -6,6 +6,7 @@ our $VERSION = '0.04';
 # our @EXPORT_OK = qw(substitute_placeholders);  # symbols to export on request
 
 use Moo;
+use Log::Log4perl::Shortcuts qw(:all);
 
 has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 

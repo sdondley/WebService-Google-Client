@@ -1,4 +1,4 @@
-package WebService::Google::Client;
+package WebService::Google::Client ;
 our $VERSION = '0.04';
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
@@ -29,11 +29,11 @@ See unit test in xt folder for more examples
 use Data::Dumper;
 use Moose;
 use WebService::Google::UserAgent;
+use Log::Log4perl::Shortcuts qw(:all);
 
-has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 has 'client' => (
     is      => 'ro',
-    default => sub { WebService::Google::UserAgent->new( debug => shift->debug ) },
+    default => sub { WebService::Google::UserAgent->new( ) },
     handles => [qw(access_token user auth_storage do_autorefresh api_query)],
     lazy    => 1
 );
@@ -41,7 +41,7 @@ has 'util' => (
     is      => 'ro',
     default => sub {
         require WebService::Google::Client::Util;
-        WebService::Google::Client::Util->new( debug => shift->debug );
+        WebService::Google::Client::Util->new( );
     },
     handles => [qw(substitute_placeholders)],
     lazy    => 1
@@ -50,32 +50,34 @@ has 'discovery' => (
     is      => 'ro',
     default => sub {
         require WebService::Google::Client::Discovery;
-        WebService::Google::Client::Discovery->new( debug => shift->debug );
+        WebService::Google::Client::Discovery->new( );
     },
     handles => [qw(getMethodMeta)],
     lazy    => 1
 );
 
+has 'log_level' => ( is => 'rw', isa => 'Str', default => 'error',
+                     trigger => \&_set_ll);
+
 sub request {
     my ( $self, $caller, $params ) = @_;
 
     # my $caller = (caller(0))[3];
-    warn "Caller: " . $caller
-      if ( $self->debug );    # like WebService::Google::Client::Calendar::Events::list
-    warn "request PARAMETERS: " . Dumper $params if ( $self->debug );
+    logd($caller, 'request_caller');
+    logd($params, 'request_parameters');
 
     my $api_q_data = $self->getMethodMeta($caller);
     $api_q_data->{options} = $params->{options};
     delete $params->{options};
 
-    warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
+    #warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
 
     # get $params from $caller object
     # proxying $self->Service->Resource attributes
 
     $api_q_data->{path} =
       $self->substitute_placeholders( $api_q_data->{path}, $params );    # util
-    warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
+      #warn 'API query data: ' . Dumper $api_q_data if ( $self->debug );
     $self->api_query($api_q_data);    # path, httpMethod
 }
 
@@ -84,12 +86,18 @@ sub AUTOLOAD {
     our $AUTOLOAD;
     my $unknown_resource =
       ( split( /::/, $AUTOLOAD ) )[-1];    # $unknown_method_name = API
-    warn $unknown_resource if ( $self->debug );
+      #    warn $unknown_resource if ( $self->debug );
+    logd($unknown_resource);
     require WebService::Google::Client::Services;
     my $a = WebService::Google::Client::Services->new;
-    $a->debug( $self->debug );
+    #$a->debug( $self->debug );
     $a->generate_one( $self, lcfirst $unknown_resource );
     $self->$unknown_resource;
+}
+
+sub _set_ll {
+  my $s = shift;
+  set_log_level($s->log_level);
 }
 
 =head1 KEY FEATURES

@@ -5,6 +5,7 @@ our $VERSION = '0.04';
 use Moo;
 use WebService::Google::Client::Credentials;
 use WebService::Google::Client::AuthStorage;
+use Log::Log4perl::Shortcuts qw(:all);
 use Mojo::UserAgent;
 use Data::Dumper;     # for debug
 use Data::Printer;    # for debug
@@ -13,7 +14,6 @@ has 'ua' => ( is => 'ro', default => sub { Mojo::UserAgent->new } );
 has 'do_autorefresh' => ( is => 'rw', default => 1 )
   ;                   # if 1 storage must be configured
 has 'auto_update_tokens_in_storage' => ( is => 'rw', default => 1 );
-has 'debug'                         => ( is => 'rw', default => 0 );
 has 'credentials'                   => (
     is      => 'rw',
     default => sub { WebService::Google::Client::Credentials->instance },
@@ -60,15 +60,15 @@ sub build_http_transaction {
     # warn "".(caller(0))[3]."() : ".Dumper \@_;
 
     my $headers = $self->build_headers;
-    warn "build_http_transaction HEADERS: " . Dumper $headers
-      if ( $self->debug );
+#    warn "build_http_transaction HEADERS: " . Dumper $headers
+#      if ( $self->debug );
 
     # Hash key names
     my $http_method   = $params->{httpMethod};    # uppercase
     my $path          = $params->{path};
     my $optional_data = $params->{options};
-    warn "build_http_transaction() Options: " . Dumper $optional_data
-      if ( $self->debug );
+#    warn "build_http_transaction() Options: " . Dumper $optional_data
+#      if ( $self->debug );
 
     my $tx;
 
@@ -193,7 +193,7 @@ sub api_query {
               ;    # get client_id, client_secret and refresh_token
             my $new_token = $self->refresh_access_token($cred)->{access_token}
               ;    # here also {id_token} etc
-            warn "Got a new token: " . $new_token if $self->debug;
+#            warn "Got a new token: " . $new_token if $self->debug;
             $self->access_token($new_token);
 
             if ( $self->auto_update_tokens_in_storage ) {
@@ -233,8 +233,8 @@ sub refresh_access_token {
 "Not enough credentials to refresh access_token. Check that you provided client_id, client_secret and refresh_token";
     }
 
-    warn "Attempt to refresh access_token with params: " . Dumper $credentials
-      if $self->debug;
+#    warn "Attempt to refresh access_token with params: " . Dumper $credentials
+#      if $self->debug;
     $credentials->{grant_type} = 'refresh_token';
     $self->ua->post(
         'https://www.googleapis.com/oauth2/v4/token' => form => $credentials )

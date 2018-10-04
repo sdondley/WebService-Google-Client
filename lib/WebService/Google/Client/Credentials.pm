@@ -1,8 +1,9 @@
-package WebService::Google::Client::Credentials;
+package WebService::Google::Client::Credentials ;
 our $VERSION = '0.04';
 # ABSTRACT: Credentials for particular Client instance. You can use this module as singleton also if you need to share credentials between two or more modules
 
 use Moo;
+use Log::Log4perl::Shortcuts qw(:all);
 with 'MooX::Singleton';
 
 has 'access_token' => ( is => 'rw' );

@@ -1,4 +1,4 @@
-package WebService::Google::Client::Services;
+package WebService::Google::Client::Services ;
 our $VERSION = '0.04';
 # ABSTRACT: generate classes, attributes and methods for appropriate API methods using Moose::Meta::Class
 
@@ -9,10 +9,9 @@ use Moose;
 # use Mouse::Meta::Class;
 # use Mouse::Meta::Attribute;
 
+use Log::Log4perl::Shortcuts qw(:all);
 use Data::Dumper;
 use Data::Printer;
-
-has 'debug' => ( is => 'rw', default => 0, lazy => 1 );
 
 # has 'client' => ( is => 'ro', default => sub { require WebService::Google::Client::Client; WebService::Google::Client::Client->new(); }, handles => [qw(api_query)], lazy => 1);
 
@@ -22,13 +21,13 @@ has 'discovery' => (
     is      => 'ro',
     default => sub {
         require WebService::Google::Client::Discovery;
-        WebService::Google::Client::Discovery->new( debug => shift->debug );
+        WebService::Google::Client::Discovery->new( );
     },
     lazy => 1
 );
 
 # use WebService::Google::Client::Discovery;
-# my $self->discovery = WebService::Google::Client::Discovery->new(debug=>shift->debug);
+# my $self->discovery = WebService::Google::Client::Discovery->new();
 
 # extends 'WebService::Google::Client';
 
@@ -47,7 +46,7 @@ has 'discovery' => (
 sub generate_one {
     my ( $self, $object, $p ) = @_;    # $p = parameter(s)
 
-    warn Dumper ref($p) if ( $self->debug );
+    #warn Dumper ref($p) if ( $self->debug );
 
     my $api;
     my $version;
@@ -62,19 +61,18 @@ sub generate_one {
         die "Wrong parameters type. Supported are HASH or SCALAR";
     }
 
-    warn $api if ( $self->debug );
+    #warn $api if ( $self->debug );
 
     if ( $self->discovery->exists($api) ) {
         $version = $self->discovery->latestStableVersion($api);
     }
     else {
-        die
-"No such service or its currently unsupported by Google API discovery";
+       logf("No such service or its currently unsupported by Google API discovery");
     }
 
     #my $base_class = 'WebService::Google::Client::';  # $object
-    warn "Generating Resources for " . ref($object) . " class"
-      if ( $self->debug );
+    #warn "Generating Resources for " . ref($object) . " class"
+    #  if ( $self->debug );
     my $base_class         = ref($object);    # $object
     my $service_name       = $api;
     my $service_class_name = ucfirst $api;
@@ -85,10 +83,10 @@ sub generate_one {
         join( '::', $base_class, $service_class_name ) );    # Calendar
     my $service_description = $self->discovery->getRest(
         { api => $service_name, version => $version } );
-    warn $service_name
-      . " resources :"
-      . Dumper $service_description->{resources}
-      if ( $self->debug );
+#    warn $service_name
+#      . " resources :"
+#      . Dumper $service_description->{resources}
+#      if ( $self->debug );
 
     my @resources = keys %{ $service_description->{resources} };
 
