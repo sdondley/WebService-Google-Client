@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+0.06      2018-10-04 10:47:53-04:00 America/New_York
+  - Minor tweak to dist.ini to update the links on metacpan
+
 0.05      2018-10-03 23:46:53-04:00 America/New_York
   - Very minor release. Last release overlooked the addition of new
     documentation to weaver.ini. Correcting.

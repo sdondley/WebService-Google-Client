@@ -4,7 +4,7 @@ WebService::Google::Client - Server-side client library for any Google App API. 
 
 # VERSION
 
-version 0.05
+version 0.06
 
 # SYNOPSIS
 
