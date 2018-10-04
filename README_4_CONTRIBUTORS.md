@@ -30,7 +30,7 @@ and installation using traditional Perl installer programs (cpan and cpanm).
 
 This module is currently undergoing an overhaul in an attempt to make it easier
 for contributors to chip in and help improve the quality and functionality of
-the module. While functional and bugfree, the module has some large gaps in its
+the module. While functional and bug-free, the module has some large gaps in its
 API coverage which are in the process of getting documented. These gaps can be
 overcome by lower-level API calls for now so the module can still be used but
 some Google API calls will take a little more effort to code.
@@ -47,7 +47,7 @@ a pain to work with. The truth is, though, that most contributors don't even
 need to know much about it and you don't even need to have it installed to
 contribute to this project. There are some simple things to be aware of,
 however. See the section on `Working with Dist::Zilla` below for more
-information. The bottom line is, don't ket `Dist::Zilla` dissuade you from
+information. The bottom line is, don't let `Dist::Zilla` dissuade you from
 contributing.
 
 ## Reporting Bugs
@@ -95,7 +95,7 @@ contribution, a rough game plan for accomplishing it and the tests that will be
 needed.
 
 Once that's done, we will then create a new branch for you. Once the branch is
-created, you should reate a new branch in your fork and set it the branch in
+created, you should create a new branch in your fork and set it the branch in
 this repo that was set up for you as the upstream branch for your new local
 branch. If you need help with this, feel free to ask. We will have a procedure
 for this once we test it and make sure it works well and is easy.
@@ -114,11 +114,11 @@ request for that branch.
 ### No Holy Wars on Best Approach to Using Git, Please
 
 We know everyone has a preferred way for using Git. But please respect the git
-workflow we have chosen for this project. We realize this isn't a huge project.
-But part of the reason we have chosen this workflow is to help get more
+work flow we have chosen for this project. We realize this isn't a huge project.
+But part of the reason we have chosen this work flow is to help get more
 comfortable with using git on more complicated projects. We are open for ways to
-make things simpler, but we aren't willing to change the entire workflow we have
-established which was chosen for a reason: learning. Please don't take offense
+make things simpler, but we aren't willing to change the entire work flow we have
+established which was chose for a reason: learning. Please don't take offense
 and we greatly appreciate your patience even if you think we're being slightly
 (or really) ridiculous.
 
@@ -148,4 +148,67 @@ the next section for more on this.
 
 ## Running Tests
 
-Coming soon...we're tired...zzzzz
+If you are new to testing, we offer this basic guide to help you which will
+hopefully provide you with enough information or at least phrases for searching
+the web for more details. If you are familiar with testing, you will want to
+read the "Getting Access Tokens to Tests" section.
+
+To run tests, clone the `WebService::Google::Client` repository to your local
+machine with Perl installed. Run your tests from inside the repository with the
+`prove` command and the `-l` option ("l" for library). Example commands:
+
+Run the tests inside of single test file:
+  `prove -l t/client_tests.t`
+
+Run all the tests in a directory recursively:
+  `prove -lr t`
+
+See the [prove documentation](https://perldoc.perl.org/prove.html) for more options and examples.
+
+There are two types of tests, **standard** tests and **extra** tests. Extra
+tests are also frequently synonymous with **author** tests, the term we will
+use here.
+
+Standard tests, located in the `t` directory of this distribution, are run by
+end users to make sure `Web::Service::Client` is installed properly and that it
+can run on their hardware and software configuration. They are also used by
+developers to ensure the code works properly.
+
+Author tests, located in the `xt` directory, are run only by developers. Any
+test that requires an actual API call must go in the author tests directory.
+These tests will fail for end users since users will cannot be run by end users
+because end users will not have the `config.json` which contains the access
+tokens it is important not to place such tests in the `t` directory for
+standard tests.
+
+### Getting Access Tokens to Tests
+
+Running author tests will require that you generate a `config.json` file per
+the instructions above in the "GETTING STARTED" section. This `config.json`
+file contains the access tokens the module needs to make the requests. You will
+also need to set two environment variables in your bash configuration file like
+so:
+
+```
+
+export GOOGLE_TOKENSFILE="/path/to/config.json"
+export GMAIL_FOR_TESTING="your_address@gmail.com"
+
+```
+
+Be sure to source (reload) your bash configuration file before running the
+tests. You'll have to research how to set these variables yourself. Please
+submit a patch to this project to help document this.
+
+### Running All Tests
+
+All tests should be run before committing your patch for all but minor
+documentation changes and other non-code improvements. If you have
+`Dist::Zilla` installed, you can do:
+
+`dzil test`
+
+This will run all standard and author tests. If you want to run just standard
+tests, do:
+
+`dzil test --no-author`

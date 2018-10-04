@@ -160,7 +160,7 @@ directory of this module. Before using it, you need to manually configure the
 scopes you will ask permission from the user to access. Unfortunately, these
 scopes are hard coded into this module at the bottom of the
 C<WebService/Google/Client/Server.pm> module in the C<__DATA__>. This will be
-improved in the near future. For now, qdd your scopes to the C<scope> key. The
+improved in the near future. For now, add your scopes to the C<scope> key. The
 scope is a URL and are L<listed
 here|https://developers.google.com/identity/protocols/googlescopes>.
 
@@ -185,7 +185,7 @@ to work setting up a public facing consent screen so
 C<WebService::Google::Client> can get scope authorization from other resource
 owners and begin making API requests on their behalf.
 
-=head3 Use Google API documentation to help generate the API calls
+=head2 Use Google API documentation to help generate the API calls
 
 See the "SYNOPSIS" above and the appropriate Google API documentation located at
 the URLs listed in the "SUPPORTED APIs" to you help you generate API calls to
@@ -360,7 +360,7 @@ information.
 On 2018-10-03, this project was forked from the L<Moo::Google> project which
 stagnated and has apparently been abandoned. As designed, this module does not
 function with all possible Google API calls but will work with simpler API
-calls.  However, to our knowledge, all API calls with the exception of batch API
+calls. However, to our knowledge, all API calls with the exception of batch API
 calls, can be made via the lower level C<api_aquery> method. This is documented
 here:
 
@@ -370,7 +370,7 @@ L<https://www.perlmonks.org/?node_id=1219833>
 
 Go to the "Issues" section on the L<GitHub project|https://github.com/sdondley/WevService-Google-Client> to report bugs, make feature requests and ask questions.
 
-For details on how to contribute, plese the L<README_4_CONTRIBUTORS.md|https://github.com/sdondley/WevService-Google-Client/blob/master/README_4_CONTRIBUTORS.md> on
+For details on how to contribute, please see the L<README_4_CONTRIBUTORS.md|https://github.com/sdondley/WevService-Google-Client/blob/master/README_4_CONTRIBUTORS.md> on
 GitHub.
 
 =head1 MODULE BACKGROUND AND HISTORY
