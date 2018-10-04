@@ -109,12 +109,12 @@ server-side web application flow to all of the Google API services.
 =head1 GETTING STARTED
 
 To develop with this module, you must have a user account with Google as well as
-a developer account both of which can be obtained from Google after acceoptance
+a developer account both of which can be obtained from Google after acceptance
 of their terms and conditions. Consult Google for more information on
 establishing these accounts.
 
 Next, you will need to register a project with Google using the Google Developer
-Console and create OAuth2 cient ID credentials for the project. This is
+Console and create OAuth2 client ID credentials for the project. This is
 accomplished by first setting up a "consent screen." The consent screen is what
 allows a resource owner (which will be just you, the developer, at first) to
 give your Google project authorization to access their data using Google's API
@@ -157,7 +157,7 @@ behalf.
 
 =item  Classes are generated dynamically using L<Moose::Meta::Class> based on Google API Discovery Service
 
-=item Different app credentials (client_id, client_secret, users access_token && refresh_token) storage - json file, DBI, MongoDB (u can add your own even)
+=item Different app credentials (client_id, client_secret, users access_token && refresh_token) storage - json file, DBI, MongoDB (you can add your own even)
 
 =item Automatic access_token refresh (if user has refresh_token) and saving refreshed token to storage
 
