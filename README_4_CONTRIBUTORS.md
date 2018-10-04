@@ -118,7 +118,7 @@ workflow we have chosen for this project. We realize this isn't a huge project.
 But part of the reason we have chosen this workflow is to help get more
 comfortable with using git on more complicated projects. We are open for ways to
 make things simpler, but we aren't willing to change the entire workflow we have
-established which was chose for a reasong: learning. Please don't take offense
+established which was chosen for a reasong: learning. Please don't take offense
 and we greatly appreciate your patience even if you think we're being slightly
 (or really) ridiculous.
 
