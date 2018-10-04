@@ -132,12 +132,12 @@ hands on experience with OAuth 2.0 and its terminology.
 =head2 Set up your project with Google
 
 To develop with this module, you must have a user account with Google as well as
-a developer account both of which can be obtained from Google after acceoptance
+a developer account both of which can be obtained from Google after acceptance
 of their terms and conditions. Consult Google for more information on
 establishing these accounts.
 
 Next, you will need to register a project with Google using the Google Developer
-Console and find the interface for creating OAuth2 cient ID credentials for the
+Console and find the interface for creating OAuth2 client ID credentials for the
 project. There, you will be asked to configure a "consent screen." The consent
 screen the interface used by a resource owner (which will be just you, the
 developer, at first) to give your Google project authorization to access their
@@ -203,7 +203,7 @@ information.
 
 =item  Classes are generated dynamically using L<Moose::Meta::Class> based on Google API Discovery Service
 
-=item Different app credentials (client_id, client_secret, users access_token && refresh_token) storage - json file, DBI, MongoDB (u can add your own even)
+=item Different app credentials (client_id, client_secret, users access_token && refresh_token) storage - json file, DBI, MongoDB (you can add your own even)
 
 =item Automatic access_token refresh (if user has refresh_token) and saving refreshed token to storage
 
