@@ -4,18 +4,19 @@ WebService::Google::Client - Server-side client library for any Google App API. 
 
 # VERSION
 
-version 0.03
+version 0.04
 
 # SYNOPSIS
 
     use WebService::Google::Client;
 
-    my $gapi = WebService::Google::Client->new(debug => 0); # my $gapi = WebService::Google::Client->new(access_token => '');
-    my $user = 'pavelsr@cpan.org'; # full gmail
+    my $gapi = WebService::Google::Client->new(log_level => 'debug');
+    # my $gapi = WebService::Google::Client->new(access_token => '');
+    my $user = 'resource_owner@gmail.com'; # full gmail
 
     $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
-    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });
-    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' });
+    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });  # NOT IMPLEMENTED YET
+    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' }); # NOT IMPLEMENTED YET
 
     $gapi->user($user);
     $gapi->do_autorefresh(1);

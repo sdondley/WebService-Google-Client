@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+0.04      2018-10-03 23:28:26-04:00 America/New_York
+  - Add some user-friendly documentation on getting started with the module
+  - Help set the stage for a more developer-friendly module with integration
+    with the `Log::Log4perl::Shortcuts` module
+  - Get rid of crufty tests
+  - Add some basic tests for Client.pm module
+  - Modest refinemenst to Dist::Zilla configuration
+
 0.03      2018-10-03 13:50:52-04:00 America/New_York
   - This is a fork of Moo::Google v0.03 which appears to have been abandoned,
     original author unresponsive since January, 2018. Many thanks for his work.
