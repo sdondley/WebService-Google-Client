@@ -1,5 +1,5 @@
 package WebService::Google::Client::Util ;
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 # ABSTRACT: Portable functions
 
 # use Exporter 'import'; # gives you Exporter's import() method directly
