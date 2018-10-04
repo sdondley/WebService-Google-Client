@@ -32,8 +32,8 @@ This module is currently undergoing an overhaul in an attempt to make it easier
 for contributors to chip in and help improve the quality and functionality of
 the module. While functional and bugfree, the module has some large gaps in its
 API coverage which are in the process of getting documented. These gaps can be
-overcome by lower-level API calls for now so the module can still be used by
-some API call will take a little more effort to code.
+overcome by lower-level API calls for now so the module can still be used but
+some Google API calls will take a little more effort to code.
 
 Once the overhaul is complete, work will begin on a second phase to overhaul
 the code as necessary and enhance its ability to make API calls using a higher
