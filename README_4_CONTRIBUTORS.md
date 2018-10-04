@@ -24,9 +24,9 @@ This module was recently forked from
 [`Moo::Google`](https://metacpan.org/pod/Moo::Google) on 2018-10-03. The
 `Moo::Google` project stalled sometime in January 2018 during the middle of
 renaming the module to `WebService::Google::Client.` The fork has successfully
-completed the module rename and is [available on metacpan for
-download](https://metacpan.org/pod/WebService::Google::Client) for installation
-and download using traditional Perl installer programs (cpan and cpanm).
+completed renaming the module and is [available on metacpan for
+download](https://metacpan.org/pod/WebService::Google::Client) for download
+and installation using traditional Perl installer programs (cpan and cpanm).
 
 This module is currently undergoing an overhaul in an attempt to make it easier
 for contributors to chip in and help improve the quality and functionality of
@@ -118,7 +118,7 @@ workflow we have chosen for this project. We realize this isn't a huge project.
 But part of the reason we have chosen this workflow is to help get more
 comfortable with using git on more complicated projects. We are open for ways to
 make things simpler, but we aren't willing to change the entire workflow we have
-established which was chosen for a reasong: learning. Please don't take offense
+established which was chosen for a reason: learning. Please don't take offense
 and we greatly appreciate your patience even if you think we're being slightly
 (or really) ridiculous.
 
