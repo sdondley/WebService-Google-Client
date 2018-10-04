@@ -1,5 +1,5 @@
 package WebService::Google::Client ;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
 

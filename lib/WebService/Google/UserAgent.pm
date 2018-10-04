@@ -1,5 +1,5 @@
 package WebService::Google::UserAgent;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # ABSTRACT: User Agent wrapper for working with Google APIs
 
 use Moo;
