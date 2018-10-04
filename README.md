@@ -4,7 +4,7 @@ WebService::Google::Client - Server-side client library for any Google App API. 
 
 # VERSION
 
-version 0.04
+version 0.05
 
 # SYNOPSIS
 
@@ -28,6 +28,54 @@ To create authorization file with tokens in current folder run _goauth_ CLI tool
 
 See unit test in xt folder for more examples
 
+# DESCRIPTION
+
+This module, still undergoing heavy development, provides an OAuth 2.0
+server-side web application flow to all of the Google API services.
+
+# GETTING STARTED
+
+To develop with this module, you must have a user account with Google as well as
+a developer account both of which can be obtained from Google after acceoptance
+of their terms and conditions. Consult Google for more information on
+establishing these accounts.
+
+Next, you will need to register a project with Google using the Google Developer
+Console and create OAuth2 cient ID credentials for the project. This is
+accomplished by first setting up a "consent screen." The consent screen is what
+allows a resource owner (which will be just you, the developer, at first) to
+give your Google project authorization to access their data using Google's API
+calls. This consent screen does not have to be verified since it is not public.
+Simply supply an "Application name" and hit "Save." Once done, finish the
+process by creating an "Other" application type. Finally, you will need to
+enable the various APIs and services you want your module to access on behalf of
+the resource owners. Consult Google's documentation for more detailed
+information on configuring your project and its APIS.
+
+Once your project is set up with the OAuth 2.0 credentials and has APIs enabled,
+you now need to ask the resource owner (in this case you) for permission to
+access their data. This is done by using the `goauth` utility in the `bin`
+directory of this module. Before using it, you need to manually configure the
+scopes you will ask permission from the user to access. Unfortunately, these
+scopes are hard coded into this module at the bottom of the
+`WebService/Google/Client/Server.pm` module in the `__DATA__`. This will be
+improved in the near future. Add your scopes to the `scope` key. The scope is
+a URL and are [listed here](https://developers.google.com/identity/protocols/googlescopes).
+
+Once the scopes are added, execute the `bin/goauth` script. It will prompt you
+for the `client_id` and `client_secret` both which are available through the
+Google console. Once entered, point your browser to `127.0.0.1:3001` and click
+on the "Click here to get Mojo tokens" link. Next log in and/or approve the
+request to access your data for the scopes listed. Once the process is complete,
+a `config.json` file will be generated for you in your directory. This JSON
+file contains the tokens used by this module to make API requests on behalf of
+you, the resource owner.
+
+Once you have verified you have everything working, you can set to work setting
+up a public facing consent screen so `WebService::Google::Client` can get scope
+authorization from other resource owners and begin making API requests on their
+behalf.
+
 # KEY FEATURES
 
 - Object-oriented calls by API->Resource->method schema. Like $gapi->Calendar->Events->lists
@@ -35,12 +83,6 @@ See unit test in xt folder for more examples
 - Different app credentials (client\_id, client\_secret, users access\_token && refresh\_token) storage - json file, DBI, MongoDB (u can add your own even)
 - Automatic access\_token refresh (if user has refresh\_token) and saving refreshed token to storage
 - CLI tool (_goauth_) with lightweight server for easy OAuth2 authorization and getting access\_ and refresh\_ tokens
-
-# SEE ALSO
-
-[API::Google](https://metacpan.org/pod/API::Google) - my old lib
-
-[Google::API::Client](https://metacpan.org/pod/Google::API::Client) - source of inspiration
 
 # SUPPORTED APIs
 
@@ -183,6 +225,31 @@ See unit test in xt folder for more examples
     youtube                     v3                                         https://developers.google.com/youtube/v3
     youtubeAnalytics            v1, v1beta1, v2                            http://developers.google.com/youtube/analytics/, https://developers.google.com/youtube/analytics
     youtubereporting            v1                                         https://developers.google.com/youtube/reporting/v1/reports/
+
+# BUGS AND LIMITATIONS
+
+On 2018-10-03, this project was forked from the [Moo::Google](https://metacpan.org/pod/Moo::Google) project which
+stagnated and has apparently been abandoned. As designed, this module does not
+function with all possible Google API calls but will work with simpler API
+calls.  However, to our knowledge, all API calls with the exception of batch API
+calls, can be made via the lower level `api_aquery` method. This is documented
+here:
+
+[https://www.perlmonks.org/?node\_id=1219833](https://www.perlmonks.org/?node_id=1219833)
+
+# CONTRIBUTIONS AND BUG REPORTS
+
+Please visit our [GitHub project home
+page](https://github.com/sdondley/WevService-Google-Client) to report bugs and
+make contributions.
+
+More thorough documentation on how to contribute is in the works.
+
+# SEE ALSO
+
+[API::Google](https://metacpan.org/pod/API::Google) - my old lib
+
+[Google::API::Client](https://metacpan.org/pod/Google::API::Client) - source of inspiration
 
 # AUTHOR
 

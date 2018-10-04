@@ -148,7 +148,6 @@ Once you have verified you have everything working, you can set to work setting
 up a public facing consent screen so C<WebService::Google::Client> can get scope
 authorization from other resource owners and begin making API requests on their
 behalf.
->>>>>>> docs
 
 =head1 KEY FEATURES
 
