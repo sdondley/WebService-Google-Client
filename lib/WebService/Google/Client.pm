@@ -1,30 +1,7 @@
-package WebService::Google::Client;
+package WebService::Google::Client ;
 our $VERSION = '0.04';
 
 # ABSTRACT: Server-side client library for any Google App API. Based on Moose
-
-=head1 SYNOPSIS
-
-    use WebService::Google::Client;
-
-    my $gapi = WebService::Google::Client->new(debug => 0); # my $gapi = WebService::Google::Client->new(access_token => '');
-    my $user = 'pavelsr@cpan.org'; # full gmail
-
-    $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
-    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });
-    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' });
-
-    $gapi->user($user);
-    $gapi->do_autorefresh(1);
-
-    my $r1 = $gapi->Calendar->Events->list({ calendarId => 'primary' })->json;
-    warn scalar @{$r1->{items}};
-
-To create authorization file with tokens in current folder run I<goauth> CLI tool
-
-See unit test in xt folder for more examples
-
-=cut
 
 use Data::Dumper;
 use Moose;
@@ -92,6 +69,78 @@ sub AUTOLOAD {
     $self->$unknown_resource;
 }
 
+=head1 SYNOPSIS
+
+    use WebService::Google::Client;
+
+    my $gapi = WebService::Google::Client->new(log_level => 'debug');
+    # my $gapi = WebService::Google::Client->new(access_token => '');
+    my $user = 'resource_owner@gmail.com'; # full gmail
+
+    $gapi->auth_storage->setup({type => 'jsonfile', path => '/path' }); # by default
+    # $gapi->auth_storage->setup({ type => 'dbi', path => 'DBI object' });  # NOT IMPLEMENTED YET
+    # $gapi->auth_storage->setup({ type => 'mongodb', path => 'details' }); # NOT IMPLEMENTED YET
+
+    $gapi->user($user);
+    $gapi->do_autorefresh(1);
+
+    my $r1 = $gapi->Calendar->Events->list({ calendarId => 'primary' })->json;
+    warn scalar @{$r1->{items}};
+
+To create authorization file with tokens in current folder run I<goauth> CLI tool
+
+See unit test in xt folder for more examples
+
+=cut
+
+=head1 DESCRIPTION
+
+This module, still undergoing heavy development, provides an OAuth 2.0
+server-side web application flow to all of the Google API services.
+
+=head1 GETTING STARTED
+
+To develop with this module, you must have a user account with Google as well as
+a developer account both of which can be obtained from Google after acceoptance
+of their terms and conditions. Consult Google for more information on
+establishing these accounts.
+
+Next, you will need to register a project with Google using the Google Developer
+Console and create OAuth2 cient ID credentials for the project. This is
+accomplished by first setting up a "consent screen." The consent screen is what
+allows a resource owner (which will be just you, the developer, at first) to
+give your Google project authorization to access their data using Google's API
+calls. This consent screen does not have to be verified since it is not public.
+Simply supply an "Application name" and hit "Save." Once done, finish the
+process by creating an "Other" application type. Finally, you will need to
+enable the various APIs and services you want your module to access on behalf of
+the resource owners. Consult Google's documentation for more detailed
+information on configuring your project and its APIS.
+
+Once your project is set up with the OAuth 2.0 credentials and has APIs enabled,
+you now need to ask the resource owner (in this case you) for permission to
+access their data. This is done by using the C<goauth> utility in the C<bin>
+directory of this module. Before using it, you need to manually configure the
+scopes you will ask permission from the user to access. Unfortunately, these
+scopes are hard coded into this module at the bottom of the
+C<WebService/Google/Client/Server.pm> module in the C<__DATA__>. This will be
+improved in the near future. Add your scopes to the C<scope> key. The scope is
+a URL and are L<listed here|https://developers.google.com/identity/protocols/googlescopes>.
+
+Once the scopes are added, execute the C<bin/goauth> script. It will prompt you
+for the C<client_id> and C<client_secret> both which are available through the
+Google console. Once entered, point your browser to C<127.0.0.1:3001> and click
+on the "Click here to get Mojo tokens" link. Next log in and/or approve the
+request to access your data for the scopes listed. Once the process is complete,
+a C<config.json> file will be generated for you in your directory. This JSON
+file contains the tokens used by this module to make API requests on behalf of
+you, the resource owner.
+
+Once you have verified you have everything working, you can set to work setting
+up a public facing consent screen so C<WebService::Google::Client> can get scope
+authorization from other resource owners and begin making API requests on their
+behalf.
+
 =head1 KEY FEATURES
 
 =over 1
@@ -107,14 +156,6 @@ sub AUTOLOAD {
 =item CLI tool (I<goauth>) with lightweight server for easy OAuth2 authorization and getting access_ and refresh_ tokens
 
 =back
-
-=head1 SEE ALSO
-
-L<API::Google> - my old lib
-
-L<Google::API::Client> - source of inspiration
-
-=cut
 
 =head1 SUPPORTED APIs
 
@@ -257,6 +298,33 @@ L<Google::API::Client> - source of inspiration
     youtube                     v3                                         https://developers.google.com/youtube/v3
     youtubeAnalytics            v1, v1beta1, v2                            http://developers.google.com/youtube/analytics/, https://developers.google.com/youtube/analytics
     youtubereporting            v1                                         https://developers.google.com/youtube/reporting/v1/reports/
+
+=cut
+
+=head1 BUGS AND LIMITATIONS
+
+On 2018-10-03, this project was forked from the L<Moo::Google> project which
+stagnated and has apparently been abandoned. As designed, this module does not
+function with all possible Google API calls but will work with simpler API
+calls.  However, to our knowledge, all API calls with the exception of batch API
+calls, can be made via the lower level C<api_aquery> method. This is documented
+here:
+
+L<https://www.perlmonks.org/?node_id=1219833>
+
+=head1 CONTRIBUTIONS AND BUG REPORTS
+
+Please visit our L<GitHub project home
+page|https://github.com/sdondley/WevService-Google-Client> to report bugs and
+make contributions.
+
+More thorough documentation on how to contribute is in the works.
+
+=head1 SEE ALSO
+
+L<API::Google> - my old lib
+
+L<Google::API::Client> - source of inspiration
 
 =cut
 
