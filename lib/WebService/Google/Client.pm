@@ -79,7 +79,7 @@ sub _set_ll {
 
 =head1 SYNOPSIS
 
-Generate an access token JSON file per the instructions in "GETTING STARTED"
+Generate an access token JSON file per the instructions in L</"GETTING STARTED">
 below. You will then be able to make API calls to Google's authorization servers
 on a resource owner's behalf like so:
 
@@ -187,10 +187,10 @@ owners and begin making API requests on their behalf.
 
 =head2 Use Google API documentation to help generate the API calls
 
-See the "SYNOPSIS" above and the appropriate Google API documentation located at
-the URLs listed in the "SUPPORTED APIs" to you help you generate API calls to
+See the L</"SYNOPSIS"> above and the appropriate Google API documentation located at
+the URLs listed in the L</"SUPPORTED APIs"> to you help you generate API calls to
 Google. Note that this module may not know how to construct all API calls using
-the syntax in the "SYNOPSIS." In such cases, you can use the lower level
+the syntax in the L</"SYNOPSIS">. In such cases, you can use the lower level
 C<api_query> method to generate API calls more directly. See this L<helpful post
 on Perlmonks.org|https://www.perlmonks.org/?node_id=1219856> for more
 information.
